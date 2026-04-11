@@ -1,4 +1,4 @@
-<\!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
@@ -156,11 +156,11 @@
       document.getElementById('dateFrom').value=''; document.getElementById('dateTo').value=''; document.getElementById('metricFilter').value='all';
       filtered=[...DAILY_DATA].sort((a,b)=>b.date.localeCompare(a.date)); renderAll(filtered,'all');
     }
-    function avg(arr,fn){const v=arr.map(fn).filter(x=>x\!==null&&x\!==undefined);return v.length?(v.reduce((a,b)=>a+b,0)/v.length).toFixed(1):'-';}
+    function avg(arr,fn){const v=arr.map(fn).filter(x=>x!==null&&x!==undefined);return v.length?(v.reduce((a,b)=>a+b,0)/v.length).toFixed(1):'-';}
     function renderKPI(data){
       const wa=avg(data,d=>d.wireless&&d.wireless.achievement), wi=avg(data,d=>d.wired&&d.wired.achievement);
-      document.getElementById('kpiWireless').textContent=wa\!=='-'?wa+'%':'-';
-      document.getElementById('kpiWired').textContent=wi\!=='-'?wi+'%':'-';
+      document.getElementById('kpiWireless').textContent=wa!=='-'?wa+'%':'-';
+      document.getElementById('kpiWired').textContent=wi!=='-'?wi+'%':'-';
       document.getElementById('kpiNps').textContent=avg(data,d=>d.nps&&d.nps.score);
       document.getElementById('kpiDays').textContent=data.length+'일';
     }
@@ -179,12 +179,12 @@
       if(all||metric==='nps')makeChart('chartNps','NPS','#34D399',data,d=>d.nps&&d.nps.score);
       if(all||metric==='device')makeChart('chartDevice','단말 TAC+(%)','#F59E0B',data,d=>d.device&&d.device.sales);
     }
-    function moodBadge(m){if(\!m)return'';const c=m==='긍정'?'pos':m==='부정'?'neg':'neu';return'<span class="badge '+c+'">'+m+'</span>';}
+    function moodBadge(m){if(!m)return'';const c=m==='긍정'?'pos':m==='부정'?'neg':'neu';return'<span class="badge '+c+'">'+m+'</span>';}
     function renderTable(data){
       document.getElementById('tableBody').innerHTML=data.map(d=>{
-        const wA=(d.wireless&&d.wireless.achievement\!=null)?d.wireless.achievement+'%':'-';
-        const wiA=(d.wired&&d.wired.achievement\!=null)?d.wired.achievement+'%':'-';
-        const n=(d.nps&&d.nps.score\!=null)?d.nps.score:'-';
+        const wA=(d.wireless&&d.wireless.achievement!=null)?d.wireless.achievement+'%':'-';
+        const wiA=(d.wired&&d.wired.achievement!=null)?d.wired.achievement+'%':'-';
+        const n=(d.nps&&d.nps.score!=null)?d.nps.score:'-';
         const wk=d.isWeeklyGenerated?'<span class="weekly-badge">주간</span>':'';
         const ev=(d.keyEvents||[]).slice(0,2).join(' / ')||'-';
         return '<tr onclick="openModal(\''+d.date+'\')"><td>'+d.date+wk+'</td><td>'+moodBadge(d.mood)+'</td><td>'+wA+'</td><td>'+wiA+'</td><td>'+n+'</td><td style="color:#94A3B8;font-size:0.8rem">'+ev+'</td></tr>';
@@ -192,15 +192,15 @@
     }
     function renderAll(data,metric){renderKPI(data);renderCharts(data,metric);renderTable(data);}
     function openModal(date){
-      const d=DAILY_DATA.find(x=>x.date===date); if(\!d)return;
+      const d=DAILY_DATA.find(x=>x.date===date); if(!d)return;
       const wl=d.wireless||{},wd=d.wired||{},nps=d.nps||{},dev=d.device||{};
       document.getElementById('modalDate').textContent='📅 '+d.date+(d.isWeeklyGenerated?' 🗓️ 주간리포트 생성일':'');
       document.getElementById('modalBody').innerHTML=
         '<div class="modal-section"><h4>전반적 요약</h4><p>'+(d.summary||'-')+'</p></div>'+
-        '<div class="modal-section"><h4>📱 무선</h4><p>달성률: '+(wl.achievement\!=null?wl.achievement+'%':'-')+' | 신규: '+(wl.new||'-')+' | MNP: '+(wl.mnp||'-')+'</p><p style="color:#94A3B8;font-size:0.82rem">'+(wl.notes||'')+'</p></div>'+
-        '<div class="modal-section"><h4>🌐 유선</h4><p>달성률: '+(wd.achievement\!=null?wd.achievement+'%':'-')+' | 초고속: '+(wd.broadband||'-')+' | IPTV: '+(wd.iptv||'-')+'</p><p style="color:#94A3B8;font-size:0.82rem">'+(wd.notes||'')+'</p></div>'+
-        '<div class="modal-section"><h4>📦 단말 TAC+</h4><p>유치율: '+(dev.sales\!=null?dev.sales+'%':'-')+'</p><p style="color:#94A3B8;font-size:0.82rem">'+(dev.notes||'')+'</p></div>'+
-        '<div class="modal-section"><h4>😊 NPS</h4><p>점수: '+(nps.score\!=null?nps.score:'-')+'</p><p style="color:#94A3B8;font-size:0.82rem">'+(nps.notes||'')+'</p></div>'+
+        '<div class="modal-section"><h4>📱 무선</h4><p>달성률: '+(wl.achievement!=null?wl.achievement+'%':'-')+' | 신규: '+(wl.new||'-')+' | MNP: '+(wl.mnp||'-')+'</p><p style="color:#94A3B8;font-size:0.82rem">'+(wl.notes||'')+'</p></div>'+
+        '<div class="modal-section"><h4>🌐 유선</h4><p>달성률: '+(wd.achievement!=null?wd.achievement+'%':'-')+' | 초고속: '+(wd.broadband||'-')+' | IPTV: '+(wd.iptv||'-')+'</p><p style="color:#94A3B8;font-size:0.82rem">'+(wd.notes||'')+'</p></div>'+
+        '<div class="modal-section"><h4>📦 단말 TAC+</h4><p>유치율: '+(dev.sales!=null?dev.sales+'%':'-')+'</p><p style="color:#94A3B8;font-size:0.82rem">'+(dev.notes||'')+'</p></div>'+
+        '<div class="modal-section"><h4>😊 NPS</h4><p>점수: '+(nps.score!=null?nps.score:'-')+'</p><p style="color:#94A3B8;font-size:0.82rem">'+(nps.notes||'')+'</p></div>'+
         '<div class="modal-section"><h4>📢 정책 변경</h4><p>'+(d.policyChanges||'-')+'</p></div>'+
         '<div class="modal-section"><h4>🤝 유통망 소통</h4><p>'+(d.distributionNotes||'-')+'</p></div>'+
         '<div class="modal-section"><h4>주요 이슈 Top5</h4><ul>'+(d.keyEvents||[]).map(e=>'<li>'+e+'</li>').join('')+'</ul></div>'+
