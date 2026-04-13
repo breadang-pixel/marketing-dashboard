@@ -259,7 +259,7 @@ const DAILY_DATA = [
   },
   {
     date:"2026-04-11",
-    summary:"소매 4-9호 V1 적용: 중고 010 세이브미만(표준) 6만원 정책 종료. 기변 선약 추가지원금 15만→5만 변경. 서광주 초고속 143.7%·IPTV 155.0% 선두권 달성. 010 82.0%·TAC+ 40.0%·마스콜3 30.8% 목표 미달 집중 관리 필요.",
+    summary:"소매 4-9호 V1 적용: 중고 010 세이브미만(표준) 6만원 정책 종료. 기변 선약 추가지원금 15만→5만 변경. 서광주 초고속 143.7%·IPTV 155.0%·TAC+ 46.1%·마스콜3 44.4% 선두권. 010 82.0% 목표 미달 집중 관리 필요.",
     mood:"중립",
     teams:{
       "동광주":{
@@ -270,8 +270,8 @@ const DAILY_DATA = [
         iptv:{achievement:113.2},
         rate1g:{target:34.0,actual:36.8},
         rateGiga:{target:90.0,actual:95.4},
-        rateTac:{target:42.0,actual:46.1},
-        rateMas:{target:38.0,actual:44.4}
+        rateTac:{target:42.0,actual:40.0},
+        rateMas:{target:38.0,actual:30.8}
       },
       "서광주":{
         o10:{achievement:82.0},
@@ -281,8 +281,8 @@ const DAILY_DATA = [
         iptv:{achievement:155.0},
         rate1g:{target:34.0,actual:45.5},
         rateGiga:{target:90.0,actual:97.3},
-        rateTac:{target:42.0,actual:40.0},
-        rateMas:{target:38.0,actual:30.8}
+        rateTac:{target:42.0,actual:46.1},
+        rateMas:{target:38.0,actual:44.4}
       },
       "전북":{
         o10:{achievement:108.8},
@@ -307,8 +307,8 @@ const DAILY_DATA = [
         rateMas:{target:38.0,actual:null}
       }
     },
-    keyEvents:["소매 4-9호 V1 시행: 중고 010 세이브미만(표준) 6만원 정책 종료","기변 선약 추가지원금 15만 등록→5만 지급으로 변경 (MNP 선약 20만→5만은 유지)","4/13 LGU+ 유심교체 시행 D-2 — 전 매장 현수막 연출 및 타사단골 MMS 발송 준비","서광주 초고속 143.7% · IPTV 155.0% — 유선 부문 소매계 선두권","서광주 TAC+ 40.0%(목표 42% 미달) · 마스콜3 30.8%(목표 38% 미달) — 집중 독려 필요"],
-    nextActions:["4/13 LGU+ 유심교체 연계 전 매장 현수막 게시 완료 확인","010 82.0% 달성률 → 목표 100% 격차 해소 전략 수립","서광주 TAC+ 40.0%(목표 42%) 미달 대리점 즉시 독려 (4/13 단말배정 연계)","서광주 마스콜3 30.8%(목표 38%) 미달 대리점 집중 독려 및 일별 체크","MNP 104.4% 유지 위한 L사 유심교체 4/13 연계 캠페인 실행"],
+    keyEvents:["소매 4-9호 V1 시행: 중고 010 세이브미만(표준) 6만원 정책 종료","기변 선약 추가지원금 15만 등록→5만 지급으로 변경 (MNP 선약 20만→5만은 유지)","4/13 LGU+ 유심교체 시행 D-2 — 전 매장 현수막 연출 및 타사단골 MMS 발송 준비","서광주 초고속 143.7%·IPTV 155.0%·TAC+ 46.1%·마스콜3 44.4% — 다수 지표 소매계 선두권","동광주 TAC+ 40.0%(목표 42% 미달)·마스콜3 30.8%(목표 38% 미달) — 공동 독려 전략 수립 필요"],
+    nextActions:["4/13 LGU+ 유심교체 연계 전 매장 현수막 게시 완료 확인","서광주 010 82.0% — 목표 100% 격차 해소 집중 전략 수립","TAC+ 선두권 유지 위한 서광주 46.1% 기세 이어가기 (4/13 단말배정 연계)","동광주 TAC+ 40.0%·마스콜3 30.8% 목표 미달 — 대리점별 독려 방안 공유","MNP 104.4% 유지 위한 L사 유심교체 4/13 연계 캠페인 실행"],
     policyChanges:"소매 4-9호 V1: 중고010 세이브미만(표준) 6만원 종료. 기변 선약 추가지원금 15만→5만 변경. 플래그십 추가지원금 정책 변경.",
     distributionNotes:"4/13 LGU+ 유심교체 대응 전 매장 외부연출 준비. 타사단골 MMS 4/13 발송 예정. 추가지원금 변경 내용 매장 공유 필요.",
     isWeeklyGenerated:false
@@ -377,5 +377,3 @@ function valClass(val, def) {
   const ratio = val / tgt;
   if (ratio >= 1.05) return 'vg';
   if (ratio >= 1.00) return 'vo';
-  if (ratio >= 0.90) return 'vw';
-  return '
