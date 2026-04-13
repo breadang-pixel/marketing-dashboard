@@ -367,11 +367,11 @@ const T_COLOR = {'동광주':'#6366F1','서광주':'#22D3EE','전북':'#F59E0B',
    HELPERS
 ═══════════════════════════════ */
 function getVal(entry, team, key) {
-  if (\!entry||\!entry.teams||\!entry.teams[team]||\!entry.teams[team][key]) return null;
+  if (!entry||!entry.teams||!entry.teams[team]||!entry.teams[team][key]) return null;
   const m=entry.teams[team][key];
   const def=KPI_DEF.find(d=>d.key===key);
-  if (\!def) return null;
-  return def.isRate ? (m.actual\!=null?m.actual:null) : (m.achievement\!=null?m.achievement:null);
+  if (!def) return null;
+  return def.isRate ? (m.actual!=null?m.actual:null) : (m.achievement!=null?m.achievement:null);
 }
 function statusClass(val,def){
   if(val==null)return'';
@@ -423,11 +423,11 @@ function renderKPICards(data){
   const withTeams=data.filter(d=>d.teams&&d.teams['서광주']).sort((a,b)=>b.date.localeCompare(a.date));
   const latest=withTeams[0];
   const el=document.getElementById('kpiCards');
-  if(\!latest){el.innerHTML='';return;}
+  if(!latest){el.innerHTML='';return;}
   const sg=latest.teams['서광주'];
   let html='';
   KPI_DEF.forEach(def=>{
-    const t=sg[def.key]; if(\!t)return;
+    const t=sg[def.key]; if(!t)return;
     const val=def.isRate?t.actual:t.achievement;
     if(val==null)return;
     const tgt=def.isRate?(t.target||def.tgtLine):def.tgtLine;
@@ -446,7 +446,7 @@ function renderCompareCharts(data,metricFilter){
   const latest=withTeams[0];
   Object.keys(chartMap).filter(k=>k.startsWith('cmp_')).forEach(k=>{if(chartMap[k]){chartMap[k].destroy();delete chartMap[k];}});
   const metricsToShow=metricFilter==='all'?KPI_DEF:KPI_DEF.filter(d=>d.key===metricFilter);
-  if(\!latest){
+  if(!latest){
     grid.innerHTML='<p style="color:#475569;padding:20px;grid-column:1/-1;font-size:0.82rem">선택 기간에 팀 비교 데이터가 없습니다.</p>';
     return;
   }
@@ -454,7 +454,7 @@ function renderCompareCharts(data,metricFilter){
     '<div class="chart-card"><h3><em>'+def.label+'</em> 팀별 '+(def.isRate?'유치율':'예상달성률')+' ('+latest.date+')</h3><canvas id="cmp_'+def.key+'"></canvas></div>'
   ).join('');
   metricsToShow.forEach(def=>{
-    const canvas=document.getElementById('cmp_'+def.key); if(\!canvas)return;
+    const canvas=document.getElementById('cmp_'+def.key); if(!canvas)return;
     const vals=TEAMS.map(t=>getVal(latest,t,def.key));
     const bgColors=TEAMS.map(t=>t==='서광주'?'#22D3EE':T_COLOR[t]+'55');
     const borderColors=TEAMS.map(t=>t==='서광주'?'#22D3EE':T_COLOR[t]+'AA');
@@ -466,7 +466,7 @@ function renderCompareCharts(data,metricFilter){
         {type:'line',label:'목표 '+def.tgtLine+'%',data:TEAMS.map(()=>def.tgtLine),borderColor:'#EF444488',borderWidth:1.5,borderDash:[5,5],pointRadius:0,fill:false,order:1}
       ]},
       options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){
-        if(ctx.datasetIndex===0){const v=ctx.raw;return(def.isRate?'유치율: ':'달성률: ')+(v\!=null?v+'%':'-');}
+        if(ctx.datasetIndex===0){const v=ctx.raw;return(def.isRate?'유치율: ':'달성률: ')+(v!=null?v+'%':'-');}
         return ctx.dataset.label;
       }}}},scales:{
         x:{ticks:{color:function(ctx){return TEAMS[ctx.index]==='서광주'?'#22D3EE':'#94A3B8';},font:function(ctx){return{weight:TEAMS[ctx.index]==='서광주'?'700':'400',size:11};}},grid:{color:'#334155'}},
@@ -488,7 +488,7 @@ function renderTrendCharts(data,metricFilter){
     '<div class="chart-card"><h3>서광주 <em>'+def.label+'</em> '+(def.isRate?'유치율':'달성률')+' 추이</h3><canvas id="trd_'+def.key+'"></canvas></div>'
   ).join('');
   metricsToShow.forEach(def=>{
-    const canvas=document.getElementById('trd_'+def.key); if(\!canvas)return;
+    const canvas=document.getElementById('trd_'+def.key); if(!canvas)return;
     chartMap['trd_'+def.key]=new Chart(canvas,{
       type:'line',
       data:{labels:sorted.map(d=>d.date.slice(5)),datasets:[
@@ -528,7 +528,7 @@ function renderTable(data){
    MODAL
 ═══════════════════════════════ */
 function makeKpiTable(d){
-  if(\!d.teams)return'';
+  if(!d.teams)return'';
   let html='<div class="msec"><h4>📊 KPI 팀별 비교 (전 지표)</h4><div style="overflow-x:auto"><table class="kpi-tbl"><tr><th>팀</th>';
   KPI_DEF.forEach(function(m){html+='<th>'+m.label+'</th>';});
   html+='</tr>';
@@ -548,7 +548,7 @@ function makeKpiTable(d){
   return html;
 }
 function openModal(date){
-  const d=DAILY_DATA.find(function(x){return x.date===date;}); if(\!d)return;
+  const d=DAILY_DATA.find(function(x){return x.date===date;}); if(!d)return;
   document.getElementById('modalTitle').textContent='📅 '+d.date+(d.isWeeklyGenerated?' 🗓️ 주간':'');
   let html='';
   html+='<div class="msec"><h4>전반적 요약</h4><p>'+(d.summary||'-')+'</p></div>';
