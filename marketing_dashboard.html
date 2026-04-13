@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>서광주팀 KPI 대시보드</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{background:#0F172A;color:#F8FAFC;font-family:'Noto Sans KR',sans-serif;padding:20px;min-height:100vh;}
+    .header{margin-bottom:18px;}
+    .header h1{color:#22D3EE;font-size:1.45rem;margin-bottom:3px;}
+    .header p{color:#475569;font-size:0.78rem;}
+    .filter-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;background:#1E293B;padding:12px 16px;border-radius:10px;margin-bottom:18px;}
+    .filter-bar label{color:#94A3B8;font-size:0.78rem;}
+    .filter-bar input,.filter-bar select{background:#0F172A;color:#F8FAFC;border:1px solid #334155;border-radius:6px;padding:5px 9px;font-family:inherit;font-size:0.8rem;}
+    .filter-bar button{border:none;border-radius:6px;padding:5px 14px;cursor:pointer;font-weight:700;font-family:inherit;font-size:0.8rem;}
+    .btn-p{background:#22D3EE;color:#0F172A;}
+    .btn-s{background:#334155;color:#F8FAFC;}
+    /* KPI Cards */
+    .kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(135px,1fr));gap:10px;margin-bottom:16px;}
+    .kpi-card{background:#1E293B;border-radius:8px;padding:11px 13px;position:relative;overflow:hidden;}
+    .kpi-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;}
+    .kc-good::before{background:#34D399;}
+    .kc-ok::before{background:#22D3EE;}
+    .kc-warn::before{background:#F59E0B;}
+    .kc-bad::before{background:#EF4444;}
+    .kpi-card .lbl{font-size:0.68rem;color:#94A3B8;margin-bottom:3px;}
+    .kpi-card .val{font-size:1.3rem;font-weight:700;}
+    .kc-good .val{color:#34D399;}
+    .kc-ok .val{color:#22D3EE;}
+    .kc-warn .val{color:#F59E0B;}
+    .kc-bad .val{color:#EF4444;}
+    .kpi-card .sub{font-size:0.65rem;color:#475569;margin-top:2px;}
+    /* Legend */
+    .legend{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:14px;padding:8px 12px;background:#1E293B;border-radius:8px;align-items:center;}
+    .legend-item{display:flex;align-items:center;gap:5px;font-size:0.76rem;}
+    .leg-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+    .legend-ref{color:#EF4444;font-size:0.7rem;display:flex;align-items:center;gap:5px;}
+    .legend-ref-line{width:18px;border-top:2px dashed #EF4444;}
+    /* Tabs */
+    .tabs{display:flex;border-bottom:1px solid #334155;margin-bottom:0;}
+    .tab-btn{background:none;border:none;color:#64748B;padding:9px 18px;cursor:pointer;font-family:inherit;font-size:0.83rem;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;}
+    .tab-btn.active{color:#22D3EE;border-bottom-color:#22D3EE;}
+    .tab-btn:hover:not(.active){color:#94A3B8;}
+    .tab-panel{display:none;padding-top:14px;}
+    .tab-panel.active{display:block;}
+    /* Charts */
+    .charts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px;}
+    .chart-card{background:#1E293B;border-radius:10px;padding:13px;}
+    .chart-card h3{font-size:0.74rem;color:#94A3B8;margin-bottom:8px;line-height:1.4;}
+    .chart-card h3 em{color:#22D3EE;font-style:normal;font-weight:700;}
+    /* Table */
+    .table-section{background:#1E293B;border-radius:10px;overflow:hidden;margin-top:18px;}
+    .table-section-head{color:#22D3EE;font-size:0.85rem;padding:12px 14px;border-bottom:1px solid #334155;}
+    .table-scroll{overflow-x:auto;}
+    table{width:100%;border-collapse:collapse;}
+    th{background:#0F172A;color:#64748B;padding:7px 9px;font-size:0.7rem;text-align:center;border-bottom:1px solid #334155;white-space:nowrap;}
+    th.tl{text-align:left;padding-left:14px;}
+    td{padding:7px 9px;font-size:0.76rem;text-align:center;border-top:1px solid #1A2744;cursor:pointer;}
+    td.tl{text-align:left;padding-left:14px;}
+    tr:hover td{background:#1A2744;}
+    .vg{color:#34D399;font-weight:600;}
+    .vo{color:#22D3EE;}
+    .vw{color:#F59E0B;}
+    .vb{color:#EF4444;font-weight:600;}
+    .vn{color:#334155;}
+    .badge{display:inline-block;padding:1px 7px;border-radius:20px;font-size:0.65rem;}
+    .bp{background:#064e3b;color:#34d399;}
+    .bn{background:#1e3a5f;color:#93c5fd;}
+    .bb{background:#4c0519;color:#fca5a5;}
+    .bwk{background:#312e81;color:#a5b4fc;margin-left:3px;}
+    /* Modal */
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:999;align-items:center;justify-content:center;}
+    .modal-overlay.open{display:flex;}
+    .modal{background:#1E293B;border-radius:14px;padding:22px;width:90%;max-width:780px;max-height:85vh;overflow-y:auto;}
+    .modal-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+    .modal-hd h2{color:#22D3EE;font-size:0.95rem;}
+    .modal-close{background:none;border:none;color:#94A3B8;font-size:1.1rem;cursor:pointer;}
+    .msec{margin-bottom:12px;}
+    .msec h4{color:#22D3EE;font-size:0.76rem;margin-bottom:5px;padding-bottom:3px;border-bottom:1px solid #334155;}
+    .msec p,.msec li{color:#CBD5E1;font-size:0.8rem;line-height:1.7;}
+    .msec ul{padding-left:14px;}
+    .kpi-tbl{width:100%;border-collapse:collapse;font-size:0.72rem;margin-top:6px;}
+    .kpi-tbl th{background:#0F172A;color:#64748B;padding:4px 7px;text-align:center;}
+    .kpi-tbl td{padding:4px 7px;text-align:center;border-top:1px solid #334155;}
+    .kpi-tbl tr.sg td{background:#22D3EE11;color:#22D3EE;font-weight:700;}
+    @media(max-width:900px){.charts-grid{grid-template-columns:repeat(2,1fr);}}
+    @media(max-width:600px){.charts-grid{grid-template-columns:1fr;}.kpi-grid{grid-template-columns:repeat(3,1fr);}}
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📊 서광주팀 KPI 대시보드</h1>
+  <p>팀별 실적 비교 · 달성률 추이 분석 | Marketing Daily Flow</p>
+</div>
+
+<div class="filter-bar">
+  <label>기간</label>
+  <input type="date" id="dateFrom">
+  <span style="color:#475569">~</span>
+  <input type="date" id="dateTo">
+  <label>지표</label>
+  <select id="metricFilter">
+    <option value="all">전체 지표</option>
+    <option value="o10">010</option>
+    <option value="mnp">MNP신규(MNO)</option>
+    <option value="mvno">MVNO-IN</option>
+    <option value="broadband">초고속</option>
+    <option value="iptv">IPTV</option>
+    <option value="rate1g">1G유치율</option>
+    <option value="rateGiga">Giga상품유치율</option>
+    <option value="rateTac">TAC+유치율</option>
+    <option value="rateMas">마스콜3유치율</option>
+  </select>
+  <button class="btn-p" onclick="applyFilter()">조회</button>
+  <button class="btn-s" onclick="resetFilter()">초기화</button>
+</div>
+
+<div class="kpi-grid" id="kpiCards"></div>
+
+<div class="legend">
+  <div class="legend-item"><div class="leg-dot" style="background:#6366F1"></div>동광주</div>
+  <div class="legend-item"><div class="leg-dot" style="background:#22D3EE;box-shadow:0 0 6px #22D3EE80"></div><strong style="color:#22D3EE">서광주 ★ (우리팀)</strong></div>
+  <div class="legend-item"><div class="leg-dot" style="background:#F59E0B"></div>전북</div>
+  <div class="legend-item"><div class="leg-dot" style="background:#34D399"></div>제주(합산)</div>
+  <div class="legend-ref" style="margin-left:auto"><div class="legend-ref-line"></div>목표선</div>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active" id="tabBtn0" onclick="switchTab(0)">📊 팀별 비교</button>
+  <button class="tab-btn" id="tabBtn1" onclick="switchTab(1)">📈 서광주 추이</button>
+</div>
+
+<div class="tab-panel active" id="panel0">
+  <div class="charts-grid" id="compareGrid"></div>
+</div>
+<div class="tab-panel" id="panel1">
+  <div class="charts-grid" id="trendGrid"></div>
+</div>
+
+<div class="table-section">
+  <div class="table-section-head">📋 일별 서광주 KPI 현황</div>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th class="tl">날짜</th>
+          <th>010</th>
+          <th>MNP</th>
+          <th>MVNO</th>
+          <th>초고속</th>
+          <th>IPTV</th>
+          <th>1G유치율</th>
+          <th>Giga유치율</th>
+          <th>TAC+</th>
+          <th>마스콜3</th>
+          <th class="tl" style="min-width:180px">분위기 / 주요이슈</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-hd">
+      <h2 id="modalTitle"></h2>
+      <button class="modal-close" onclick="document.getElementById('modalOverlay').classList.remove('open')">✕</button>
+    </div>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════
+   DAILY DATA
+═══════════════════════════════ */
+const DAILY_DATA = [
+  {
+    date:"2026-04-01",
+    summary:"4월 첫 영업일. ZOOM 정책설명회(4/1)로 4월 신규 정책 공표. 하트리그 시작, 우리T라이트 카드 종료, T안심보상 S26 민팃 마감(4/5) 임박.",
+    mood:"중립",
+    teams:null,
+    keyEvents:["4월 ZOOM 정책설명회(4/1) — 이동전화·유선 신규 정책 공표","하트리그 4월 시작 — 마스콜3 25%↑1점/31%↑2점/38%↑3점","우리T라이트 카드 4월부터 종료 — 삼성T·KBT·롯데T·신한T 캐시백만 유지","T안심보상 S26 민팃 ALL보상 마감 D-4 (4/5까지 반납 완료 건만 지급)","S26 더블스토리지 소명 결과 공유 — 이슈 대리점 개별 후속 조치 진행"],
+    nextActions:["4/1 ZOOM 정책설명회 내용 전 대리점 즉시 공유","T안심보상 S26 민팃 미반납 고객 D-4 독촉 연락","하트리그 참여 현황 파악 및 초반 목표 설정","선거용 010 개통 주의사항 전 채널 재공지","NPS 저조 매장 마케터 방문 일정 3건 이상 확정"],
+    policyChanges:"하트리그 시작(25%↑1점~38%↑3점). 소매구독챔피언 38%↑60%/40%↑80%/42%↑100%. 우리T라이트 카드 종료. T안심보상 S26 민팃 4/5 마감.",
+    distributionNotes:"4월 정책 전 대리점 공유 필요. S26 더블스토리지 소명 이슈 개별 후속 조치. 선거 기간 대리인 개통 주의사항 재공지.",
+    isWeeklyGenerated:false
+  },
+  {
+    date:"2026-04-02",
+    summary:"ZOOM 정책설명회(4/1) 후속 실행 개시. T안심보상 D-3(4/5 마감) 반납 독촉 최우선. 하트리그 2일차 초반 달성률 집계 시작.",
+    mood:"중립",
+    teams:null,
+    keyEvents:["ZOOM 정책설명회(4/1) 후속 — 4월 신규 정책 대리점 전파 실행 개시","T안심보상 S26 민팃 반납 D-3 (4/5 마감) — 독촉 연락 강화","하트리그 2일차 — 마스콜3 25%↑1점 달성 대리점 집계 시작","NPS 4월 관리 2일차 — 저조 매장 방문 일정 확정 필요","선거 기간 대리인 개통 주의 지속 — 신분증+위임장 미비 시 개통 금지"],
+    nextActions:["4월 정책 전 대리점 공유 완료 여부 확인 및 미전파 대리점 즉시 연락","T안심보상 S26 민팃 미반납 고객 D-3 독촉 연락","하트리그 2일차 현황 파악 — 25% 미진입 대리점 전략 점검","NPS 저조 매장 방문 일정 이번 주 3건 이상 확정","선거 기간 대리인 개통 위반 모니터링"],
+    policyChanges:"4/1 ZOOM 정책설명회 공표 내용 전파 진행 중. 마스콜3 하트리그(25%↑1점/31%↑2점/38%↑3점). T안심보상 S26 민팃 4/5 마감 D-3.",
+    distributionNotes:"4월 정책 전 대리점 공유 진행 중. T안심보상 미반납 고객 독촉. 하트리그 참여 독려. NPS 저조 매장 방문 일정 조율.",
+    isWeeklyGenerated:false
+  },
+  {
+    date:"2026-04-06",
+    summary:"13시 MNP 단가 축소 시행(시장 과열 방지). 소매구독챔피언 203건/609만원. 팀 주말 사이즈 타팀 대비 2배 달성. 정산 수수료 세금계산서 4/7 15시 마감.",
+    mood:"중립",
+    teams:null,
+    keyEvents:["13시 MNP 단가 축소 시행 — S26군·아17군·A566 -5만/M166 -3만/A175 -2만원","소매구독챔피언 유치현황(4/5): 203건/6,090,000원 — 0건 대리점 5개 전략 공유 필요","3월 정산 수수료 세금계산서 4/7(화) 15시까지 인증 — 미인증 3개점","조기해지 소명 공지(중고 9월/MNP기변 11월 가입건) — 4/8(목)까지 스윈 쪽지","SG 콘테스트: A그룹 강성훈·B그룹 김성화·C그룹 김진범 1위"],
+    nextActions:["주말 이월건 오전 중 개통 완료 확인","소매구독챔피언 0건 대리점 5개(목포·대산·그린·백산·주안) 즉시 전략 공유","정산 수수료 세금계산서 미인증 3개점(엠코리아·영인·주안) 4/7 15시 전 완료","조기해지 소명(4/8 마감) 대상 대리점 스윈 쪽지 제출 독촉","TWF 세팅 미완료 15개 매장 4/10까지 완료 안내"],
+    policyChanges:"MNP 단가 축소 시행(S26군·아17군·A566 -5만/M166 -3만/A175 -2만). 조기해지 소명 공지. TWF 세팅 완료 시 VD +0.5점.",
+    distributionNotes:"소매구독챔피언 0건 대리점 5개 즉시 전략 공유. 정산 수수료 미인증 3개점 독촉. T화면공유 활용률 부족 매장 점검. 마스콜3 해외여행 콘테스트 안내.",
+    isWeeklyGenerated:true
+  },
+  {
+    date:"2026-04-07",
+    summary:"기변 중심 주말 판매 종료 후 010순증·MNP·유선 전환 국면. 본부 비용 절감 기조로 기변 지원금 축소·선약 5만원 추가. 공시 비중 80%로 목표 85% 미달.",
+    mood:"중립",
+    teams:null,
+    keyEvents:["기변 지원금 2~3만원 축소·선약 5만원 추가 — 010순증·MNP·유선 전환 국면","저가 MNP 모델 3~5만원 단가 축소 시행","기변 프리미엄 93% 달성(목표 초과) vs 공시 비중 80%(목표 85% 미달)","타사단골·유선·구독 지표 집중 전략 전환 시기","NPS 비판매성 저조 매장 마케터 방문 진행"],
+    nextActions:["010순증·MNP 중심 전략으로 전 대리점 전환 공지","공시 비중 85% 목표 달성 미달 대리점 집중 관리","타사단골 JUMP UP(4/1~4/15) 현황 중간 점검","유선 월초 진도율 점검 및 저조 매장 개별 독려","NPS 저조 매장 방문 완료 건 피드백 취합"],
+    policyChanges:"기변 지원금 2~3만원 축소. 선약 5만원 추가. 저가 MNP 모델 단가 3~5만원 축소. 010순증·MNP·유선 집중 전략 전환.",
+    distributionNotes:"기변→010순증·MNP·유선 전환 전략 전 대리점 전파. 타사단골·유선·구독 지표 집중 독려.",
+    isWeeklyGenerated:false
+  },
+  {
+    date:"2026-04-08",
+    summary:"전월 대비 판매 사이즈 80.8%(전사 76%, 본부 소매 75%) 상대적 우위. 마스콜3 TAC+ 유치율 44.9%(목표 42% 초과). TWF 세팅 마감(4/10) 7개 매장 미완료.",
+    mood:"긍정",
+    teams:null,
+    keyEvents:["전월 대비 판매 사이즈 80.8%(전사 76%, 본부 소매 75%) — 상대적 우위 유지","마스콜3 TAC+ 유치율 44.9%(목표 42% 초과) — 0건 대리점 5개 즉시 독려","TWF 세팅 미완료 7개 매장 4/10(금)까지 완료 시 VD 0.5점 가점","S26 기본형(S942 256GB) 물량 부족 가능성 — 선제 재고 확보 권고","타사단골 JUMP UP 진행 중(4/1~4/15) — #약속_ 메모 입력건만 실적 인정"],
+    nextActions:["마스콜3 0건 대리점 5개 40% 달성 즉시 독려 (4/13 단말배정 연계)","TWF 세팅 미완료 7개 매장 4/10까지 완료 확인","S26 기본형 물량 부족 대비 재고 선제 확보","4/6 비판매성 비추천 NPS 녹취 확인 및 본사 이의제기 검토","공시 비중 85% 목표 미달 대리점 집중 관리"],
+    policyChanges:"마스콜3 하트크루 점수 기준: 38%↑3점/35%↑2.5점/30%↑2점. 65세 이상 어르신 본부 5만원 정책(M140/와이드8/퀀텀6). 타사단골 JUMP UP #약속_ 메모 입력건만 인정.",
+    distributionNotes:"삼성 더블스토리지 소명 누락 건 처리 완료(67건). 타사단골 MMS발송 할인 문구 포함 권장. TWF 세팅 미완료 매장 독촉.",
+    isWeeklyGenerated:false
+  },
+  {
+    date:"2026-04-09",
+    summary:"SIM/중고 표준요금제 0원→6만원 정책 전환(4/13까지 한시). L사 유심교체(4/13~) MNP 기회 포착. 해지쿼터 초과 대리점 긴급 관리 필요.",
+    mood:"중립",
+    teams:null,
+    keyEvents:["SIM/중고 표준요금제 0원→6만원 정책 전환 (4/9~4/13 한시, ARPU 제외)","아이폰17(일반·E) 익일 SKN 수거 예정 — 긴급 출고 독려 필요","L사 유심교체 4/13 시작 — MNP·UIT·유선결합 전략 준비 요청","해지쿼터 초과 대리점: 무등·무안·월드 — 자체건 중심 VoC 방지","마스콜3 0건 대리점: 전남목포·대산·그린·백산·주안 (4/13 단말배정 연계)"],
+    nextActions:["이17(일반·E) 익일 SKN 수거 전 대리점별 재고 확인 및 최대 출고 독려","4/13 L사 유심교체 대응 — 매장 외부연출·MNP→유선결합 시나리오 교육","무등·무안·월드 해지쿼터 초과 긴급 점검 및 VoC 방지 대책 수립","마스콜3 0건 대리점 40% 달성 일별 체크 계획 수립 (4/13 단말배정 전)","요금수납 비판매성 업무 NPS 개선 — T혜택 5가지 안내·베스트톡 매뉴얼 재공유"],
+    policyChanges:"SIM/중고 표준요금제 단가 0원→6만원 (2026.4.9~4.13 한시). 중고010 표준요금제 KPI·ARPU 제외 운영. ZEM요금제 M166·A175군 +10만원.",
+    distributionNotes:"SG 컨테스트: A그룹 1위 무등금프. 타사단골 JUMP UP 4/1~4/15. L사 유심교체 4/13 대응 매장 외부연출 준비 요청.",
+    isWeeklyGenerated:false
+  },
+  {
+    date:"2026-04-10",
+    summary:"LGU+ VMD 방통위 제보 이슈 발생으로 현장 긴장. 010 중고sim 표준 6만원 정책 조기종료(4/11~). S26 울트라 MMS 캠페인 2주차 발송으로 주말 실적 기대.",
+    mood:"중립",
+    teams:null,
+    keyEvents:["010 중고sim 세이브 미만(표준) 6만원 정책 조기종료 — 4/11부터 세이브 6만 원복","LGU+ 유심교체 VMD 문구 방통위 제보 — 전매장 즉시 VMD 제거 지시","S26 울트라 4월 2주차 MMS 캠페인 전매장 발송 (70만 할인 안내)","SG 컨테스트 순위 A그룹 무등금프 1위, 4/13 LG유심교체 MNP 기회 포착","유선 진도율 69.9%(4/8기준) — 유선 0건 매장 집중관리 대상 포함"],
+    nextActions:["LGU+ 유심교체 VMD 전매장 제거 완료 확인 및 사진 증빙 수령","010 중고sim 표준 6만원 조기종료(4/11~) 전매장 공지 및 세이브 이상 요금 재안내","S26 울트라 MMS 미발송 매장 독촉 및 문의 고객 인입 현황 모니터링","주말 요금납부 고객 NPS 관리 — T혜택 5가지 안내·10점 만점 물티슈 활용","4/13 LG 유심교체 대응 MNP→UIT→가족단위→유선결합 시나리오 매장 사전 준비"],
+    policyChanges:"010 중고sim 세이브 미만(표준) 6만원 조기종료 (4/11~적용). 010중고 세이브 6만으로 원복. LGU+ VMD 유심교체 문구 금지.",
+    distributionNotes:"SG 컨테스트 A그룹 무등금프 1위·남선화순광덕 2위. B그룹 인천1가·무안 공동1위. 4/13 LG유심교체 MNP 기회 활용 전략 준비 요청.",
+    isWeeklyGenerated:false
+  },
+  {
+    date:"2026-04-11",
+    summary:"소매 4-9호 V1 적용: 중고 010 세이브미만(표준) 6만원 정책 종료. 기변 선약 추가지원금 15만→5만 변경. 서광주 초고속 143.7%·IPTV 155.0% 선두권 달성. 010 82.0%·TAC+ 40.0%·마스콜3 30.8% 목표 미달 집중 관리 필요.",
+    mood:"중립",
+    teams:{
+      "동광주":{
+        o10:{achievement:72.6},
+        mnp:{achievement:111.3},
+        mvno:{achievement:110.1},
+        broadband:{achievement:113.8},
+        iptv:{achievement:113.2},
+        rate1g:{target:34.0,actual:36.8},
+        rateGiga:{target:90.0,actual:95.4},
+        rateTac:{target:42.0,actual:46.1},
+        rateMas:{target:38.0,actual:44.4}
+      },
+      "서광주":{
+        o10:{achievement:82.0},
+        mnp:{achievement:104.4},
+        mvno:{achievement:104.0},
+        broadband:{achievement:143.7},
+        iptv:{achievement:155.0},
+        rate1g:{target:34.0,actual:45.5},
+        rateGiga:{target:90.0,actual:97.3},
+        rateTac:{target:42.0,actual:40.0},
+        rateMas:{target:38.0,actual:30.8}
+      },
+      "전북":{
+        o10:{achievement:108.8},
+        mnp:{achievement:90.6},
+        mvno:{achievement:100.8},
+        broadband:{achievement:155.3},
+        iptv:{achievement:157.1},
+        rate1g:{target:34.0,actual:34.3},
+        rateGiga:{target:90.0,actual:100.0},
+        rateTac:{target:42.0,actual:null},
+        rateMas:{target:38.0,actual:null}
+      },
+      "제주(합산)":{
+        o10:{achievement:78.1},
+        mnp:{achievement:141.2},
+        mvno:{achievement:100.8},
+        broadband:{achievement:114.8},
+        iptv:{achievement:99.5},
+        rate1g:{target:34.0,actual:52.3},
+        rateGiga:{target:90.0,actual:95.5},
+        rateTac:{target:42.0,actual:null},
+        rateMas:{target:38.0,actual:null}
+      }
+    },
+    keyEvents:["소매 4-9호 V1 시행: 중고 010 세이브미만(표준) 6만원 정책 종료","기변 선약 추가지원금 15만 등록→5만 지급으로 변경 (MNP 선약 20만→5만은 유지)","4/13 LGU+ 유심교체 시행 D-2 — 전 매장 현수막 연출 및 타사단골 MMS 발송 준비","서광주 초고속 143.7% · IPTV 155.0% — 유선 부문 소매계 선두권","서광주 TAC+ 40.0%(목표 42% 미달) · 마스콜3 30.8%(목표 38% 미달) — 집중 독려 필요"],
+    nextActions:["4/13 LGU+ 유심교체 연계 전 매장 현수막 게시 완료 확인","010 82.0% 달성률 → 목표 100% 격차 해소 전략 수립","서광주 TAC+ 40.0%(목표 42%) 미달 대리점 즉시 독려 (4/13 단말배정 연계)","서광주 마스콜3 30.8%(목표 38%) 미달 대리점 집중 독려 및 일별 체크","MNP 104.4% 유지 위한 L사 유심교체 4/13 연계 캠페인 실행"],
+    policyChanges:"소매 4-9호 V1: 중고010 세이브미만(표준) 6만원 종료. 기변 선약 추가지원금 15만→5만 변경. 플래그십 추가지원금 정책 변경.",
+    distributionNotes:"4/13 LGU+ 유심교체 대응 전 매장 외부연출 준비. 타사단골 MMS 4/13 발송 예정. 추가지원금 변경 내용 매장 공유 필요.",
+    isWeeklyGenerated:false
+  },
+  {
+    date:"2026-04-12",
+    summary:"일요일(비영업일). 당일 카카오톡 대화 및 이미지 데이터 없음. 4/11(토) 정책 변경사항 이월. 4/13(월) LGU+ 유심교체 시행 예정.",
+    mood:"중립",
+    teams:null,
+    keyEvents:["일요일 비영업일 — 금일 관련 데이터 없음","4/11(토) 소매 4-9호 V1 이월 적용: 중고 010 표준 6만 종료·추가지원금 기변 15만→5만","4/13(월) LGU+ 유심교체 시행 예정 — MNP 기회 도래 임박","4/13(월) 본사 본부VOD 교육 신규 오픈 예정 (보이스피싱예방2 등)","S26 울트라 MMS 2주차 효과 주말 고객 문의 증가 → 월요일 전환율 집중 관리"],
+    nextActions:["LGU+ 유심교체(4/13~) 연계 MNP 캠페인 실행 — 전 매장 현수막 확인 및 타사단골 MMS 발송","중고 010 표준요금제 6만 종료 후 세이브 이상 요금제 세팅 100% 전환 점검","4월 2주차 NPS 결과 집계 및 비추천 발생 매장 긴급 코칭","마스콜3·T올케어 0건 대리점 5곳 관리자 긴급 독려 — 4월 목표 40% 달성 계획 수립","본부VOD 교육(4/13 오픈) 즉시 수강 독려 공지 발송"],
+    policyChanges:"4/11 소매 4-9호 이월 적용. 4/13 LGU+ 유심교체 시행. 별도 신규 정책 없음.",
+    distributionNotes:"금일 관련 데이터 없음 (일요일 비영업일). 4/13 LGU+ 유심교체 대응 사전 준비 완료 예정.",
+    isWeeklyGenerated:true
+  }
+];
+
+/* ═══════════════════════════════
+   KPI METRIC DEFINITIONS
+═══════════════════════════════ */
+const KPI_DEF = [
+  {key:'o10',      label:'010',         isRate:false, tgtLine:100, unit:'%달성'},
+  {key:'mnp',      label:'MNP신규',     isRate:false, tgtLine:100, unit:'%달성'},
+  {key:'mvno',     label:'MVNO-IN',     isRate:false, tgtLine:100, unit:'%달성'},
+  {key:'broadband',label:'초고속',      isRate:false, tgtLine:100, unit:'%달성'},
+  {key:'iptv',     label:'IPTV',        isRate:false, tgtLine:100, unit:'%달성'},
+  {key:'rate1g',   label:'1G유치율',    isRate:true,  tgtLine:34,  unit:'%'},
+  {key:'rateGiga', label:'Giga유치율',  isRate:true,  tgtLine:90,  unit:'%'},
+  {key:'rateTac',  label:'TAC+유치율',  isRate:true,  tgtLine:42,  unit:'%'},
+  {key:'rateMas',  label:'마스콜3',     isRate:true,  tgtLine:38,  unit:'%'}
+];
+
+const TEAMS = ['동광주','서광주','전북','제주(합산)'];
+const T_COLOR = {'동광주':'#6366F1','서광주':'#22D3EE','전북':'#F59E0B','제주(합산)':'#34D399'};
+
+/* ═══════════════════════════════
+   HELPERS
+═══════════════════════════════ */
+function getVal(entry, team, key) {
+  if (!entry || !entry.teams || !entry.teams[team] || !entry.teams[team][key]) return null;
+  const m = entry.teams[team][key];
+  const def = KPI_DEF.find(d => d.key === key);
+  if (!def) return null;
+  if (def.isRate) return m.actual != null ? m.actual : null;
+  return m.achievement != null ? m.achievement : null;
+}
+
+function getTarget(key) {
+  const def = KPI_DEF.find(d => d.key === key);
+  return def ? def.tgtLine : null;
+}
+
+function statusClass(val, def) {
+  if (val == null) return '';
+  const tgt = def.tgtLine;
+  const ratio = val / tgt;
+  if (ratio >= 1.05) return 'kc-good';
+  if (ratio >= 1.00) return 'kc-ok';
+  if (ratio >= 0.90) return 'kc-warn';
+  return 'kc-bad';
+}
+
+function valClass(val, def) {
+  if (val == null) return 'vn';
+  const tgt = def.tgtLine;
+  const ratio = val / tgt;
+  if (ratio >= 1.05) return 'vg';
+  if (ratio >= 1.00) return 'vo';
+  if (ratio >= 0.90) return 'vw';
+  return '
