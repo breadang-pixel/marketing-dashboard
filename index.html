@@ -382,21 +382,36 @@ const DAILY_DATA = [
     date:"2026-04-14",
     summary:"본부 무선 정책 당일 변경(S26 CW추가·와이드8·M140·아15 단가 보강). 유선 4-3호 정책 시행으로 동판 수익성 조정. 010 일실적 83건(49%)/월실적 38%. NPS 요금수납 75.5% 저조. 서광주 소성장 전사 대비 120% 수준 유지.",
     mood:"중립",
-    wireless:{
-      new:83,
-      mnp:null,
-      fiveG:null,
-      achievement:49,
-      notes:"010 일목표 169건 중 15:50기준 83건(49%). 월실적 1,393건(38%). MVNO 일 65건(76%), 월 1,342건(51%). 기변 프리미엄비중 92%(목표90% 초과). S26 CW공시MNP/기변+2만, 선약기변+4만, 와이드8 MNP+3만, M140+5만, 아15+10만."
+    teams:{
+      "동광주":{
+        o10:{achievement:102.0},mnp:{achievement:70.4},mvno:{achievement:88.7},
+        broadband:{achievement:null},iptv:{achievement:null},
+        rate1g:{target:34.0,actual:36.5},rateGiga:{target:90.0,actual:95.4},
+        rateTac:{target:42.0,actual:46.0},rateMas:{target:38.0,actual:null},
+        rateNps:{target:86.0,actual:90.0},rateTarget:{target:55.0,actual:29.0}
+      },
+      "서광주":{
+        o10:{achievement:77.0},mnp:{achievement:40.0},mvno:{achievement:51.0},
+        broadband:{achievement:null},iptv:{achievement:null},
+        rate1g:{target:34.0,actual:45.5},rateGiga:{target:90.0,actual:97.0},
+        rateTac:{target:42.0,actual:46.1},rateMas:{target:38.0,actual:null},
+        rateNps:{target:86.0,actual:88.5},rateTarget:{target:55.0,actual:37.3}
+      },
+      "전북":{
+        o10:{achievement:97.5},mnp:{achievement:67.0},mvno:{achievement:89.0},
+        broadband:{achievement:null},iptv:{achievement:null},
+        rate1g:{target:34.0,actual:32.6},rateGiga:{target:90.0,actual:99.0},
+        rateTac:{target:42.0,actual:40.0},rateMas:{target:38.0,actual:null},
+        rateNps:{target:86.0,actual:89.0},rateTarget:{target:55.0,actual:17.2}
+      },
+      "제주(합산)":{
+        o10:{achievement:null},mnp:{achievement:null},mvno:{achievement:null},
+        broadband:{achievement:null},iptv:{achievement:null},
+        rate1g:{target:34.0,actual:null},rateGiga:{target:90.0,actual:null},
+        rateTac:{target:42.0,actual:null},rateMas:{target:38.0,actual:null},
+        rateNps:{target:86.0,actual:null},rateTarget:{target:55.0,actual:null}
+      }
     },
-    wired:{
-      broadband:9,
-      iptv:null,
-      achievement:null,
-      notes:"전일(4/13) 초고속 9건/MNP 27건(동판율 33% 저조). 유선정책 4-3호(4/14~): 동판기간 이+초+티 2만원 축소, 중고MNP 연계 유선 2만원 축소."
-    },
-    device:{sales:null, notes:"당일 배정: S26군·S25FE·아17·A17·A36. M166 재고 소진 독려(2Q 후속모델 예정). TAC+·마스콜3 20% 미만 대리점 단말배정 불이익."},
-    nps:{score:75.5, notes:"요금수납 NPS 75.5%(⚠최저). 번호변경 80.0%, 부가서비스 78.4% 주의. T-Campus T Focus 응대가이드 4종 전직원 이수 의무."},
     keyEvents:[
       "무선 정책 당일 변경: S26 CW공시/선약 추가, 와이드8·M140·아이폰15 단가 보강 (9:30 즉시 적용)",
       "유선 정책 4-3호(4/14~) 시행: 동판 2만원 축소, 중고MNP 연계 유선 2만원 축소",
