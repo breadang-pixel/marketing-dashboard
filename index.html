@@ -598,4 +598,63 @@ function renderTable(data){
   document.getElementById('tableBody').innerHTML=html;
 }
 
-/
+/* ═══════════════════════════════
+   MODAL
+═══════════════════════════════ */
+function makeKpiTable(d){
+  if(!d.teams)return'';
+  let html='<div class="msec"><h4>📊 KPI 팀별 비교 (전 지표)</h4><div style="overflow-x:auto"><table class="kpi-tbl"><tr><th>팀</th>';
+  KPI_DEF.forEach(function(m){html+='<th>'+m.label+'</th>';});
+  html+='</tr>';
+  TEAMS.forEach(function(team){
+    const isSG=team==='서광주';
+    html+='<tr'+(isSG?' class="sg"':'')+'>'+
+      '<td>'+(isSG?'★ ':'')+team+'</td>';
+    KPI_DEF.forEach(function(def){
+      const v=getVal(d,team,def.key);
+      if(v==null){html+='<td>-</td>';return;}
+      const color=v>=def.tgtLine?'#34D399':v>=def.tgtLine*0.9?'#F59E0B':'#EF4444';
+      html+='<td style="color:'+color+'">'+v+'%</td>';
+    });
+    html+='</tr>';
+  });
+  html+='</table></div></div>';
+  return html;
+}
+function openModal(date){
+  const d=DAILY_DATA.find(function(x){return x.date===date;}); if(!d)return;
+  document.getElementById('modalTitle').textContent='📅 '+d.date+(d.isWeeklyGenerated?' 🗓️ 주간':'');
+  let html='';
+  html+='<div class="msec"><h4>전반적 요약</h4><p>'+(d.summary||'-')+'</p></div>';
+  html+=makeKpiTable(d);
+  html+='<div class="msec"><h4>📢 정책 변경</h4><p>'+(d.policyChanges||'-')+'</p></div>';
+  html+='<div class="msec"><h4>🤝 유통망 소통</h4><p>'+(d.distributionNotes||'-')+'</p></div>';
+  html+='<div class="msec"><h4>🔥 주요 이슈 Top5</h4><ul>'+(d.keyEvents||[]).map(function(e){return'<li>'+e+'</li>';}).join('')+'</ul></div>';
+  html+='<div class="msec"><h4>✅ AI 추천 액션</h4><ul>'+(d.nextActions||[]).map(function(a){return'<li>'+a+'</li>';}).join('')+'</ul></div>';
+  document.getElementById('modalContent').innerHTML=html;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+document.getElementById('modalOverlay').addEventListener('click',function(e){
+  if(e.target===document.getElementById('modalOverlay'))document.getElementById('modalOverlay').classList.remove('open');
+});
+
+/* ═══════════════════════════════
+   TAB SWITCH
+═══════════════════════════════ */
+function switchTab(idx){
+  [0,1].forEach(function(i){
+    document.getElementById('panel'+i).classList.toggle('active',i===idx);
+    document.getElementById('tabBtn'+i).classList.toggle('active',i===idx);
+  });
+  const metric=document.getElementById('metricFilter').value;
+  if(idx===0)renderCompareCharts(filtered,metric);
+  else renderTrendCharts(filtered,metric);
+}
+
+/* ═══════════════════════════════
+   INIT
+═══════════════════════════════ */
+window.onload=function(){resetFilter();};
+</script>
+</body>
+</html>
