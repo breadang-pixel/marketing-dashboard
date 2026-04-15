@@ -384,32 +384,32 @@ const DAILY_DATA = [
     mood:"중립",
     teams:{
       "동광주":{
-        o10:{achievement:102.0},mnp:{achievement:70.4},mvno:{achievement:88.7},
-        broadband:{achievement:113.4},iptv:{achievement:119.0},
-        rate1g:{target:34.0,actual:36.5},rateGiga:{target:90.0,actual:95.4},
-        rateTac:{target:42.0,actual:46.0},rateMas:{target:38.0,actual:null},
-        rateNps:{target:86.0,actual:90.0},rateTarget:{target:55.0,actual:29.0}
+        o10:{achievement:83.7},mnp:{achievement:112.6},mvno:{achievement:126.8},
+        arpu:{achievement:102.1},broadband:{achievement:101.7},iptv:{achievement:103.7},
+        rate1g:{target:34.0,actual:36.4},rateGiga:{target:90.0,actual:94.2},
+        rateTac:{target:42.0,actual:46.6},rateMas:{target:38.0,actual:36.2},
+        rateNps:{target:86.0,actual:88.7},rateTarget:{target:55.0,actual:34.2}
       },
       "서광주":{
-        o10:{achievement:77.0},mnp:{achievement:40.0},mvno:{achievement:51.0},
-        broadband:{achievement:134.0},iptv:{achievement:119.0},
-        rate1g:{target:34.0,actual:45.5},rateGiga:{target:90.0,actual:97.0},
-        rateTac:{target:42.0,actual:46.1},rateMas:{target:38.0,actual:null},
-        rateNps:{target:86.0,actual:88.5},rateTarget:{target:55.0,actual:37.3}
+        o10:{achievement:80.4},mnp:{achievement:99.0},mvno:{achievement:101.8},
+        arpu:{achievement:105.9},broadband:{achievement:119.4},iptv:{achievement:136.5},
+        rate1g:{target:34.0,actual:43.2},rateGiga:{target:90.0,actual:96.6},
+        rateTac:{target:42.0,actual:47.6},rateMas:{target:38.0,actual:44.2},
+        rateNps:{target:86.0,actual:85.9},rateTarget:{target:55.0,actual:41.8}
       },
       "전북":{
-        o10:{achievement:97.5},mnp:{achievement:67.0},mvno:{achievement:89.0},
-        broadband:{achievement:158.0},iptv:{achievement:157.0},
-        rate1g:{target:34.0,actual:32.6},rateGiga:{target:90.0,actual:99.0},
-        rateTac:{target:42.0,actual:40.0},rateMas:{target:38.0,actual:null},
-        rateNps:{target:86.0,actual:89.0},rateTarget:{target:55.0,actual:17.2}
+        o10:{achievement:101.6},mnp:{achievement:91.0},mvno:{achievement:94.2},
+        arpu:{achievement:100.0},broadband:{achievement:134.3},iptv:{achievement:142.4},
+        rate1g:{target:34.0,actual:34.0},rateGiga:{target:90.0,actual:99.0},
+        rateTac:{target:42.0,actual:39.9},rateMas:{target:38.0,actual:34.6},
+        rateNps:{target:86.0,actual:85.8},rateTarget:{target:55.0,actual:25.0}
       },
       "제주(합산)":{
-        o10:{achievement:null},mnp:{achievement:null},mvno:{achievement:null},
-        broadband:{achievement:null},iptv:{achievement:null},
-        rate1g:{target:34.0,actual:null},rateGiga:{target:90.0,actual:null},
-        rateTac:{target:42.0,actual:null},rateMas:{target:38.0,actual:null},
-        rateNps:{target:86.0,actual:null},rateTarget:{target:55.0,actual:null}
+        o10:{achievement:77.6},mnp:{achievement:130.9},mvno:{achievement:96.5},
+        arpu:{achievement:101.4},broadband:{achievement:105.5},iptv:{achievement:95.4},
+        rate1g:{target:34.0,actual:53.8},rateGiga:{target:90.0,actual:98.1},
+        rateTac:{target:42.0,actual:43.0},rateMas:{target:38.0,actual:33.0},
+        rateNps:{target:86.0,actual:84.7},rateTarget:{target:55.0,actual:33.3}
       }
     },
     keyEvents:[
@@ -439,6 +439,7 @@ const KPI_DEF = [
   {key:'o10',       label:'010',          isRate:false, tgtLine:100, unit:'%달성'},
   {key:'mnp',       label:'MNP신규',      isRate:false, tgtLine:100, unit:'%달성'},
   {key:'mvno',      label:'MVNO-IN',      isRate:false, tgtLine:100, unit:'%달성'},
+  {key:'arpu',      label:'매출ARPU',       isRate:false, tgtLine:100, unit:'%달성'},
   {key:'broadband', label:'초고속',        isRate:false, tgtLine:100, unit:'%달성'},
   {key:'iptv',      label:'IPTV',          isRate:false, tgtLine:100, unit:'%달성'},
   {key:'rate1g',    label:'1G유치율',      isRate:true,  tgtLine:34,  unit:'%'},
