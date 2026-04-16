@@ -1,4 +1,4 @@
-<!-- last-updated: 2026-04-16 06:45:11 -->
+<!-- last-updated: 2026-04-16 07:25:19 -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -502,11 +502,11 @@ const T_COLOR = {'동광주':'#6366F1','서광주':'#22D3EE','전북':'#F59E0B',
    HELPERS
 ═══════════════════════════════ */
 function getVal(entry, team, key) {
-  if (\!entry || \!entry.teams || \!entry.teams[team] || \!entry.teams[team][key]) return null;
+  if (!entry || !entry.teams || !entry.teams[team] || !entry.teams[team][key]) return null;
   const m = entry.teams[team][key];
   const def = KPI_DEF.find(d => d.key === key);
-  if (\!def) return null;
-  return def.isRate ? (m.actual \!= null ? m.actual : null) : (m.achievement \!= null ? m.achievement : null);
+  if (!def) return null;
+  return def.isRate ? (m.actual != null ? m.actual : null) : (m.achievement != null ? m.achievement : null);
 }
 function statusClass(val, def) {
   if (val == null) return '';
@@ -572,16 +572,16 @@ function renderKPICards(data) {
   const withTeams = data.filter(d => d.teams && d.teams['서광주']).sort((a,b) => b.date.localeCompare(a.date));
   const latest = withTeams[0];
   const el = document.getElementById('kpiCards');
-  if (\!latest || \!latest.teams) { el.innerHTML = '<p style="color:#475569;padding:8px">팀별 데이터 없음</p>'; return; }
+  if (!latest || !latest.teams) { el.innerHTML = '<p style="color:#475569;padding:8px">팀별 데이터 없음</p>'; return; }
   const sg = latest.teams['서광주'];
   el.innerHTML = KPI_DEF.map(def => {
-    const t = sg[def.key]; if (\!t) return '';
+    const t = sg[def.key]; if (!t) return '';
     const val = def.isRate ? t.actual : t.achievement;
     const tgt = def.isRate ? (t.target || def.tgtLine) : def.tgtLine;
     const sc  = statusClass(val, def);
     return `<div class="kpi-card ${sc}">
       <div class="lbl">${def.label}</div>
-      <div class="val">${val \!= null ? val + '%' : '-'}</div>
+      <div class="val">${val != null ? val + '%' : '-'}</div>
       <div class="sub">목표 ${tgt}% | ${latest.date}</div>
     </div>`;
   }).join('');
@@ -599,9 +599,9 @@ function renderCompareCharts(data, metricFilter) {
   grid.innerHTML = metricsToShow.map(def =>
     `<div class="chart-card"><h3>팀별 <em>${def.label}</em> ${def.isRate?'유치율':'달성률'} 비교</h3><canvas id="cmp_${def.key}"></canvas></div>`
   ).join('');
-  if (\!latest) return;
+  if (!latest) return;
   metricsToShow.forEach(def => {
-    const canvas = document.getElementById('cmp_'+def.key); if (\!canvas) return;
+    const canvas = document.getElementById('cmp_'+def.key); if (!canvas) return;
     const vals         = TEAMS.map(t => getVal(latest, t, def.key));
     const bgColors     = TEAMS.map(t => t==='서광주' ? '#22D3EE' : T_COLOR[t]+'55');
     const borderColors = TEAMS.map(t => t==='서광주' ? '#22D3EE' : T_COLOR[t]+'AA');
@@ -618,7 +618,7 @@ function renderCompareCharts(data, metricFilter) {
       options: {
         responsive: true,
         plugins: { legend:{display:false}, tooltip:{ callbacks:{ label:function(ctx){
-          if(ctx.datasetIndex===0){ const v=ctx.raw; return (def.isRate?'유치율: ':'달성률: ')+(v\!=null?v+'%':'-'); }
+          if(ctx.datasetIndex===0){ const v=ctx.raw; return (def.isRate?'유치율: ':'달성률: ')+(v!=null?v+'%':'-'); }
           return ctx.dataset.label;
         }}}},
         scales: {
@@ -642,7 +642,7 @@ function renderTrendCharts(data, metricFilter) {
     `<div class="chart-card"><h3>서광주 <em>${def.label}</em> ${def.isRate?'유치율':'달성률'} 추이</h3><canvas id="trd_${def.key}"></canvas></div>`
   ).join('');
   metricsToShow.forEach(def => {
-    const canvas = document.getElementById('trd_'+def.key); if (\!canvas) return;
+    const canvas = document.getElementById('trd_'+def.key); if (!canvas) return;
     chartMap['trd_'+def.key] = new Chart(canvas, {
       type: 'line',
       data: {
@@ -698,7 +698,7 @@ function renderTable(data) {
 ═══════════════════════════════ */
 function openModal(date) {
   const d = DAILY_DATA.find(x => x.date===date);
-  if (\!d) return;
+  if (!d) return;
   document.getElementById('modalTitle').textContent = '📅 ' + d.date + ' 상세 리포트';
   let html = '';
   // 요약
@@ -729,7 +729,7 @@ function openModal(date) {
       TEAMS.forEach(team => {
         const v = getVal(d, team, def.key);
         const cls = team==='서광주' ? ' class="'+valClass(v,def)+'"' : '';
-        html += `<td${cls}>${v\!=null?v+'%':'-'}</td>`;
+        html += `<td${cls}>${v!=null?v+'%':'-'}</td>`;
       });
       html += `<td style="color:#475569">${def.tgtLine}%</td></tr>`;
     });
