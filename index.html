@@ -1,4 +1,4 @@
-<!-- last-updated: 2026-04-18 00:58:54 -->
+<\!-- last-updated: 2026-04-18 06:11:18 -->
 <!-- last-updated: 2026-04-16 06:00:05 -->
 <!DOCTYPE html>
 <html lang="ko">
@@ -849,14 +849,132 @@ function renderCompareCharts(data, metricFilter) {
 /* ═══════════════════════════════
    TREND CHARTS (서광주 Line)
 ═══════════════════════════════ */
+function renderTrendCharts(data, metricFilter) {
+  const grid = document.getElementById('trendGrid');
+  const sorted = [...data].sort((a,b) => a.date.localeCompare(b.date));
+  Object.keys(chartMap).filter(k => k.startsWith('trd_')).forEach(k => { if(chartMap[k]){ chartMap[k].destroy(); delete chartMap[k]; } });
+  const metricsToShow = metricFilter==='all' ? KPI_DEF : KPI_DEF.filter(d => d.key===metricFilter);
+  grid.innerHTML = metricsToShow.map(def =>
+    `<div class="chart-card"><h3>서광주 <em>${def.label}</em> ${def.isRate?'유치율':'달성률'} 추이</h3><canvas id="trd_${def.key}"></canvas></div>`
+  ).join('');
+  metricsToShow.forEach(def => {
+    const canvas = document.getElementById('trd_'+def.key); if (!canvas) return;
+    chartMap['trd_'+def.key] = new Chart(canvas, {
+      type: 'line',
+      data: {
+        labels: sorted.map(d => d.date.slice(5)),
+        datasets: [
+          { label:'서광주', data:sorted.map(d=>getVal(d,'서광주',def.key)), borderColor:'#22D3EE', backgroundColor:'#22D3EE22', tension:0.3, fill:true, pointRadius:5, pointBackgroundColor:'#22D3EE', spanGaps:false },
+          { label:'목표 '+def.tgtLine+'%', data:sorted.map(()=>def.tgtLine), borderColor:'#EF444466', borderWidth:1.5, borderDash:[4,4], pointRadius:0, fill:false }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend:{labels:{color:'#94A3B8',font:{size:10},boxWidth:12}} },
+        scales: {
+          x: { ticks:{color:'#94A3B8',font:{size:10}}, grid:{color:'#334155'} },
+          y: { ticks:{color:'#94A3B8',font:{size:10}}, grid:{color:'#334155'}} 
+        }
+      }
+    });
+  });
+}
 
-document.addEventListener('DOMContentLoaded',function(){
-  const today=new Date();
-  const y=today.getFullYear();
-  const m=String(today.getMonth()+1).padStart(2,'0');
-  const d=String(today.getDate()).padStart(2,'0');
-  document.getElementById('dateFrom').value=y+'-'+m+'-01';
-  document.getElementById('dateTo').value=y+'-'+m+'-'+d;
+/* ═══════════════════════════════
+   TABLE
+═══════════════════════════════ */
+function fmtCell(val, def) {
+  if (val == null) return '<span class="vn">-</span>';
+  return '<span class="'+valClass(val,def)+'">'+val+'%</span>';
+}
+
+function renderTable(data) {
+  let html = '';
+  data.forEach(function(d) {
+    let cells = '';
+    KPI_DEF.forEach(function(def) {
+      cells += '<td>' + fmtCell(getVal(d,'서광주',def.key), def) + '</td>';
+    });
+    const moodBadge = d.mood==='긍정' ? '<span class="badge bp">긍정</span>' :
+                      d.mood==='부정' ? '<span class="badge bb">부정</span>' :
+                      '<span class="badge bn">중립</span>';
+    const wkBadge = d.isWeeklyGenerated ? '<span class="badge bwk">주간</span>' : '';
+    const topIssue = d.keyEvents && d.keyEvents[0] ? d.keyEvents[0].slice(0,30)+'…' : (d.summary||'').slice(0,30)+'…';
+    html += `<tr onclick="openModal('${d.date}')">
+      <td class="tl"><strong>${d.date}</strong></td>
+      ${cells}
+      <td class="tl">${moodBadge}${wkBadge} <span style="color:#94A3B8;font-size:0.7rem">${topIssue}</span></td>
+    </tr>`;
+  });
+  document.getElementById('tableBody').innerHTML = html || '<tr><td colspan="14" style="color:#475569;padding:16px">데이터 없음</td></tr>';
+}
+
+/* ═══════════════════════════════
+   MODAL
+═══════════════════════════════ */
+function openModal(date) {
+  const d = DAILY_DATA.find(x => x.date===date);
+  if (!d) return;
+  document.getElementById('modalTitle').textContent = '📅 ' + d.date + ' 상세 리포트';
+  let html = '';
+  // 요약
+  html += `<div class="msec"><h4>오늘의 요약</h4><p>${d.summary||'-'}</p></div>`;
+  // 주요 이슈
+  if (d.keyEvents && d.keyEvents.length) {
+    html += '<div class="msec"><h4>주요 이슈 TOP 5</h4><ul>' + d.keyEvents.map(e=>`<li>${e}</li>`).join('') + '</ul></div>';
+  }
+  // AI 추천
+  if (d.nextActions && d.nextActions.length) {
+    html += '<div class="msec"><h4>AI 추천 액션</h4><ul>' + d.nextActions.map(a=>`<li>${a}</li>`).join('') + '</ul></div>';
+  }
+  // 정책 변경
+  if (d.policyChanges) {
+    html += `<div class="msec"><h4>정책 변경</h4><p>${d.policyChanges}</p></div>`;
+  }
+  // 유통망
+  if (d.distributionNotes) {
+    html += `<div class="msec"><h4>유통망 소통</h4><p>${d.distributionNotes}</p></div>`;
+  }
+  // KPI 팀별 비교 (teams 데이터 있을 경우)
+  if (d.teams) {
+    html += '<div class="msec"><h4>팀별 KPI 현황</h4>';
+    html += '<table class="kpi-tbl"><thead><tr><th>지표</th>' + TEAMS.map(t=>`<th${t==='서광주'?' style="color:#22D3EE"':''}>` + t + '</th>').join('') + '<th>목표</th></tr></thead><tbody>';
+    KPI_DEF.forEach(def => {
+      html += '<tr' + (true ? '' : '') + '>';
+      html += `<td style="text-align:left;color:#94A3B8">${def.label}</td>`;
+      TEAMS.forEach(team => {
+        const v = getVal(d, team, def.key);
+        const cls = team==='서광주' ? ' class="'+valClass(v,def)+'"' : '';
+        html += `<td${cls}>${v!=null?v+'%':'-'}</td>`;
+      });
+      html += `<td style="color:#475569">${def.tgtLine}%</td></tr>`;
+    });
+    html += '</tbody></table></div>';
+  }
+  document.getElementById('modalContent').innerHTML = html;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+// ESC 키로 모달 닫기
+document.addEventListener('keydown', function(e){
+  if (e.key==='Escape') document.getElementById('modalOverlay').classList.remove('open');
+});
+// 오버레이 클릭으로 모달 닫기
+document.getElementById('modalOverlay').addEventListener('click', function(e){
+  if (e.target===this) this.classList.remove('open');
+});
+
+/* ═══════════════════════════════
+   INIT — 페이지 로드 시 자동 실행
+═══════════════════════════════ */
+document.addEventListener('DOMContentLoaded', function() {
+  // 기본 날짜 필터: 이번 달 1일 ~ 오늘
+  const today = new Date();
+  const y = today.getFullYear();
+  const m = String(today.getMonth()+1).padStart(2,'0');
+  const d = String(today.getDate()).padStart(2,'0');
+  document.getElementById('dateFrom').value = y+'-'+m+'-01';
+  document.getElementById('dateTo').value   = y+'-'+m+'-'+d;
   resetFilter();
 });
 </script>
