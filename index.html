@@ -1,4 +1,4 @@
-<!-- last-updated: 2026-04-20 00:31:11 -->
+<!-- last-updated: 2026-04-21 00:16:44 -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -759,6 +759,102 @@ const DAILY_DATA = [
     ],
     policyChanges:"주말 무데이터. 4/20(월) 유선 정책 4-3호_v2 만료 예정.",
     distributionNotes:"주말 무데이터. S26 단골특가 캠페인 4/20(월) 종료 예정.",
+    isWeeklyGenerated:false
+  }
+,
+  {
+    date:"2026-04-20",
+    summary:"010·MVNO 목표 하향 발표(010 -10%/MVNO -6%). 전략점 4차 운영(4/21~23) 예고 — 사실상 마지막 차수. 서광주 010 월말예상 달성률 98%(15:50 기준). MNP·ARPU·초고속·IPTV 목표 초과 달성 지속. 마스콜3 44.6%(목표 42%), NPS 87.8%(목표 86%).",
+    mood:"긍정",
+    wireless:{
+      new:133,
+      mnp:334,
+      fiveG:null,
+      achievement:99.1,
+      notes:"010 예상달성률 99.1%(19일기준). MNP 106.1%, MVNO 103.3%, ARPU 103.8%. 010 Grade 정책(금~월 3건→건당7만) 오늘 마감. 타사단골MNP OCB 선착순70건 달성으로 정책 종료."
+    },
+    wired:{
+      broadband:175,
+      iptv:216,
+      achievement:116.1,
+      notes:"초고속 예상달성률 116.1%, IPTV 127.3%. Giga유치율 96.6%(목표34%). 1G유치율 41.7%(목표40%). SG Infra 수혜예상: 인천|남선|무등|태주|티원|대동."
+    },
+    teams:{
+      "동광주":{
+        o10:      {target:718, actual:476,  achievement:109.2},
+        mnp:      {target:832, actual:404,  achievement:118.2},
+        mvno:     {target:213, actual:149,  achievement:126.1},
+        arpu:     {target:74789, actual:75571, achievement:101.0},
+        broadband:{target:320, actual:153,  achievement:91.1},
+        iptv:     {target:330, actual:164,  achievement:91.0},
+        rate1g:   {target:34.0, actual:40.7},
+        rateGiga: {target:34.0, actual:94.6},
+        rateTac:  {target:90.0, actual:94.2},
+        rateMas:  {target:42.0, actual:43.7},
+        rateNps:  {target:86.0, actual:89.8},
+        rateTarget:{target:55.0, actual:47.9}
+      },
+      "서광주":{
+        o10:      {target:705, actual:424,  achievement:99.1},
+        mnp:      {target:445, actual:334,  achievement:106.1},
+        mvno:     {target:199, actual:114,  achievement:103.3},
+        arpu:     {target:73717, actual:76532, achievement:103.8},
+        broadband:{target:189, actual:175,  achievement:116.1},
+        iptv:     {target:305, actual:216,  achievement:127.3},
+        rate1g:   {target:40.0, actual:41.7},
+        rateGiga: {target:34.0, actual:96.6},
+        rateTac:  {target:90.0, actual:97.3},
+        rateMas:  {target:42.0, actual:44.6},
+        rateNps:  {target:86.0, actual:87.8},
+        rateTarget:{target:55.0, actual:56.4}
+      },
+      "전북":{
+        o10:      {target:426, actual:295,  achievement:111.7},
+        mnp:      {target:445, actual:237,  achievement:99.7},
+        mvno:     {target:164, actual:95,   achievement:103.8},
+        arpu:     {target:74617, actual:74103, achievement:99.3},
+        broadband:{target:189, actual:122,  achievement:116.1},
+        iptv:     {target:197, actual:133,  achievement:118.4},
+        rate1g:   {target:40.0, actual:36.7},
+        rateGiga: {target:34.0, actual:97.7},
+        rateTac:  {target:90.0, actual:97.3},
+        rateMas:  {target:42.0, actual:38.7},
+        rateNps:  {target:86.0, actual:84.7},
+        rateTarget:{target:55.0, actual:39.1}
+      },
+      "제주(합산)":{
+        o10:      {target:481, actual:241,  achievement:82.5},
+        mnp:      {target:420, actual:280,  achievement:121.2},
+        mvno:     {target:146, actual:95,   achievement:107.6},
+        arpu:     {target:75513, actual:76688, achievement:101.6},
+        broadband:{target:145, actual:81,   achievement:100.0},
+        iptv:     {target:146, actual:79,   achievement:96.5},
+        rate1g:   {target:40.0, actual:52.2},
+        rateGiga: {target:34.0, actual:98.3},
+        rateTac:  {target:90.0, actual:95.2},
+        rateMas:  {target:42.0, actual:42.0},
+        rateNps:  {target:86.0, actual:87.9},
+        rateTarget:{target:55.0, actual:null}
+      }
+    },
+    device:{sales:null, notes:"마스콜3 44.6%(서광주), TAC+ 97.3%. 0건 대리점: 한국정보·그린·주안. 소매구독챔피언: 38%↑60%/40%↑80%/42%↑100% 지급."},
+    nps:{score:87.8, notes:"서광주 NPS 비판매성 87.8%(목표86%). 남선 문흥점·상무점 0.0% 관리 필요. T-Campus 비판매성 4개 과정 전직원 이수 관리."},
+    keyEvents:[
+      "010·MVNO 목표 하향 공지 — 010신규 10%·MVNO 6% 즉시 하향(본부 강현욱)",
+      "전략점 4차 운영 확정(4/21~23) — 와8 선약 60만/UIT 선약 50만, 4차 후 조기 종료 가능성 높음",
+      "010 Grade 정책(금~월 3건→건당7만) 오늘 마감 + 타사단골MNP OCB 선착순70건 달성 종료",
+      "OCB 제세정보 등록 마감 임박 (~4/24) — 3월 단말보험TAC+ 5만원 초과 크루 필수",
+      "마스콜3 0건 대리점 3곳(한국정보·그린·주안) 긴급 독려·봄맞이 IMC 캠페인 미참여 다수"
+    ],
+    nextActions:[
+      "전략점 4차 단가 수령 즉시 대리점별 배분 및 4/21~23 MNP 집중 실행 지시",
+      "하향 조정 목표 반영 후 서광주 잔여 010/MVNO 목표 재산출 및 매장별 재배분",
+      "마스콜3 0건 대리점 3곳(한국정보·그린·주안) 오전 중 긴급 콜 독려",
+      "OCB 제세정보 미등록 크루 확인 및 등록 완료 독려 (~4/24 마감)",
+      "봄맞이 IMC 캠페인·교육 미이수자 4/24(금) 추가차수 수강 안내"
+    ],
+    policyChanges:"010신규 10%·MVNO 6% 목표 하향. 전략점 4차(4/21~23, 와8 선약60만/UIT 선약50만). OCB 제세정보 등록 ~4/24. 본부 쌍방향 교육 추가차수 4/24 10시.",
+    distributionNotes:"온라인 주례 회의 4/20 15:30 Zoom(파트장·이동정책 실무). 봄맞이 IMC 캠페인 미참여 매장 다수(한국 본점·옥주·남선 풍암/금호 등). 요금제 UP-Sell MMS 재발송 독려. SG Select PT 확대 실적 상위: 백현·서해 남악·수완프리미엄.",
     isWeeklyGenerated:false
   }
 ];
