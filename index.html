@@ -1,5 +1,4 @@
-<\!-- last-updated: 2026-04-22 05:35:22 -->
-<!-- last-updated: 2026-04-20 09:00:00 -->
+<!-- last-updated: 2026-04-22 12:47:48 -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -1231,7 +1230,7 @@ function openModal(date) {
       TEAMS.forEach(team => {
         const v = getVal(d, team, def.key);
         const cls = team==='서광주' ? ' class="'+valClass(v,def)+'"' : '';
-        html += `<td${cls}>${v\!=null?v+'%':'-'}</td>`;
+        html += `<td${cls}>${v!=null?v+'%':'-'}</td>`;
       });
       html += `<td style="color:#475569">${def.tgtLine}%</td></tr>`;
     });
