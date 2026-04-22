@@ -857,6 +857,59 @@ const DAILY_DATA = [
     distributionNotes:"온라인 주례 회의 4/20 15:30 Zoom(파트장·이동정책 실무). 봄맞이 IMC 캠페인 미참여 매장 다수(한국 본점·옥주·남선 풍암/금호 등). 요금제 UP-Sell MMS 재발송 독려. SG Select PT 확대 실적 상위: 백현·서해 남악·수완프리미엄.",
     isWeeklyGenerated:false
   }
+  ,{
+    date:"2026-04-21",
+    summary:"서광주 010신규 예상달성률 107.8%, MNP 106.9%로 월말 상승 모멘텀 확보. 유선(IPTV 119.8%, 초고속 105.8%) 강세 유지. 전략점 4차 운영(와8 60만/UIT 50만) 시작. 마스콜3 0건 대리점 3곳, NPS 0% 매장 2곳 집중 관리 필요.",
+    mood:"긍정",
+    wireless:{
+      new:502,
+      mnp:367,
+      fiveG:null,
+      achievement:107.8,
+      notes:"010 신규: 목표 705건, 실적 502건, 예상 760건, 예상달성률 107.8%. MNP K+L: 목표 445건, 실적 367건, 가정합산 411건, 예상달성률 106.9%. MVNO: 목표 170건, 실적 130건, 가정합산 142건. ARPU: 목표 73,717원, 실적 76,406원, 달성률 103.6%."
+    },
+    wired:{
+      broadband:null,
+      iptv:null,
+      achievement:105.8,
+      notes:"초고속 예상달성률 105.8%, IPTV 119.8%. 1G 유치율 41.0%, Giga 유치율 97.7%."
+    },
+    teams:{
+      "서광주":{
+        o10:      {target:705, actual:502,  achievement:107.8},
+        mnp:      {target:445, actual:367,  achievement:106.9},
+        mvno:     {target:170, actual:130,  achievement:null},
+        arpu:     {target:73717, actual:76406, achievement:103.6},
+        broadband:{target:null, actual:null, achievement:105.8},
+        iptv:     {target:null, actual:null, achievement:119.8},
+        rate1g:   {target:40.0, actual:41.0},
+        rateGiga: {target:34.0, actual:97.7},
+        rateTac:  {target:90.0, actual:96.6},
+        rateMas:  {target:42.0, actual:45.0},
+        rateNps:  {target:86.0, actual:87.3},
+        rateTarget:{target:55.0, actual:40.9}
+      }
+    },
+    device:{sales:null, notes:"금일 관련 데이터 없음"},
+    nps:{score:87.3, notes:"서광주 NPS 비판매성 87.3%(목표 86% 상회). 남선 문흥점·상무점 0.0% 긴급 관리 필요."},
+    keyEvents:[
+      "전략점 4차 운영 개시(4/21~23) — 와8 선약 60만, UIT 선약 50만(UIT 5만 축소, 시즌 최종 회차)",
+      "010 일그레이드 정책 변경: 2건→5만원 / S26 코웍 ~4/27 연장",
+      "SG 010 잔여 9일 일평균 25건 필요 — 대리점별 배분 점검 시점",
+      "마스콜3 0건 대리점(한국정보·그린·주안) + 20% 미만(백산·티원) 긴급 독려",
+      "NPS 0% 매장(남선 문흥점·상무점) — T-Campus 미이수 + 타사단골 5건 미만 병행 지도"
+    ],
+    nextActions:[
+      "마스콜3 0건 대리점(한국정보·그린·주안) 즉시 방문/전화 독려 및 일별 목표 제시",
+      "전략점 4차(~4/23) 와8 60만/UIT 50만 달성률 교차 점검 — 마지막 회차 집중 지원",
+      "SG 010 잔여 9일 일평균 25건 평가 → 대리점별 일별 할당 목표 재배분 및 전송",
+      "NPS 0% 매장 긴급 관리 + T-Campus 미이수 직원 추가 이수 완료 확인",
+      "유선 SG Select 4/24 청약 마감 전 최종 달성률 점검 + 미진 대리점 집중 지원"
+    ],
+    policyChanges:"전략점 4차 운영(4/21~23): 와8 선약 60만/UIT 선약 50만(UIT 5만 축소, 4차 종료 후 중단). 010 일그레이드 2건→5만원. S26 선약기변 일그레이드 2건→7만원. S26 코웍 ~4/27 연장. 유선 SG Select 청약 4/24까지 인정.",
+    distributionNotes:"마스콜3 0건: 한국정보·그린·주안. 20% 미만: 백산·티원. 부진 010 대리점: 광주E&T 16.8%, 대산 -30.3%, 월드 0.0%, 주안 0.0%, 옥주 25.2%, 한국정보 21.6%. NPS: 서광주 87.3%(목표 86% 상회), 남선 문흥점·상무점 0.0% 긴급 관리 필요.",
+    isWeeklyGenerated:false
+  }
 ];
 
 
@@ -1159,14 +1212,4 @@ document.getElementById('modalOverlay').addEventListener('click', function(e){
 ═══════════════════════════════ */
 document.addEventListener('DOMContentLoaded', function() {
   // 기본 날짜 필터: 이번 달 1일 ~ 오늘
-  const today = new Date();
-  const y = today.getFullYear();
-  const m = String(today.getMonth()+1).padStart(2,'0');
-  const d = String(today.getDate()).padStart(2,'0');
-  document.getElementById('dateFrom').value = y+'-'+m+'-01';
-  document.getElementById('dateTo').value   = y+'-'+m+'-'+d;
-  resetFilter();
-});
-</script>
-</body>
-</html>
+  const today 
