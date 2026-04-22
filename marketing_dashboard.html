@@ -875,19 +875,61 @@ const DAILY_DATA = [
       notes:"초고속 예상달성률 105.8%, IPTV 119.8%. 1G 유치율 41.0%, Giga 유치율 97.7%."
     },
     teams:{
+      "동광주":{
+        o10:      {target:718,   actual:531,  achievement:111.9},
+        mnp:      {target:595,   actual:426,  achievement:114.6},
+        mvno:     {target:183,   actual:163,  achievement:147.9},
+        arpu:     {target:74789, actual:75455, achievement:100.9},
+        broadband:{target:320,   actual:187,  achievement:90.8},
+        iptv:     {target:305,   actual:187,  achievement:92.5},
+        rate1g:   {target:40.0,  actual:41.7},
+        rateGiga: {target:34.0,  actual:94.1},
+        rateTac:  {target:90.0,  actual:94.6},
+        rateMas:  {target:42.0,  actual:44.3},
+        rateNps:  {target:86.0,  actual:88.9},
+        rateTarget:{target:55.0, actual:47.9}
+      },
       "서광주":{
-        o10:      {target:705, actual:502,  achievement:107.8},
-        mnp:      {target:445, actual:367,  achievement:106.9},
-        mvno:     {target:170, actual:130,  achievement:null},
+        o10:      {target:705,   actual:502,  achievement:107.8},
+        mnp:      {target:445,   actual:367,  achievement:106.9},
+        mvno:     {target:170,   actual:130,  achievement:126.4},
         arpu:     {target:73717, actual:76406, achievement:103.6},
-        broadband:{target:null, actual:null, achievement:105.8},
-        iptv:     {target:null, actual:null, achievement:119.8},
-        rate1g:   {target:40.0, actual:41.0},
-        rateGiga: {target:34.0, actual:97.7},
-        rateTac:  {target:90.0, actual:96.6},
-        rateMas:  {target:42.0, actual:45.0},
-        rateNps:  {target:86.0, actual:87.3},
+        broadband:{target:311,   actual:222,  achievement:105.8},
+        iptv:     {target:330,   actual:232,  achievement:119.8},
+        rate1g:   {target:40.0,  actual:41.0},
+        rateGiga: {target:34.0,  actual:96.4},
+        rateTac:  {target:90.0,  actual:96.6},
+        rateMas:  {target:42.0,  actual:45.0},
+        rateNps:  {target:86.0,  actual:87.3},
         rateTarget:{target:55.0, actual:40.9}
+      },
+      "전북":{
+        o10:      {target:426,   actual:300,  achievement:106.6},
+        mnp:      {target:406,   actual:269,  achievement:104.1},
+        mvno:     {target:140,   actual:108,  achievement:128.4},
+        arpu:     {target:74617, actual:74371, achievement:99.7},
+        broadband:{target:189,   actual:133,  achievement:108.6},
+        iptv:     {target:197,   actual:139,  achievement:110.6},
+        rate1g:   {target:40.0,  actual:37.6},
+        rateGiga: {target:34.0,  actual:97.7},
+        rateTac:  {target:90.0,  actual:97.7},
+        rateMas:  {target:42.0,  actual:39.6},
+        rateNps:  {target:86.0,  actual:83.5},
+        rateTarget:{target:55.0, actual:40.6}
+      },
+      "제주(합산)":{
+        o10:      {target:363,   actual:252,  achievement:105.1},
+        mnp:      {target:420,   actual:297,  achievement:117.9},
+        mvno:     {target:131,   actual:119,  achievement:150.0},
+        arpu:     {target:75513, actual:76708, achievement:101.6},
+        broadband:{target:145,   actual:93,   achievement:97.2},
+        iptv:     {target:146,   actual:89,   achievement:94.7},
+        rate1g:   {target:40.0,  actual:54.8},
+        rateGiga: {target:34.0,  actual:98.4},
+        rateTac:  {target:90.0,  actual:95.5},
+        rateMas:  {target:42.0,  actual:41.8},
+        rateNps:  {target:86.0,  actual:86.9},
+        rateTarget:{target:55.0, actual:58.0}
       }
     },
     device:{sales:null, notes:"금일 관련 데이터 없음"},
@@ -1183,12 +1225,12 @@ function openModal(date) {
     html += '<div class="msec"><h4>팀별 KPI 현황</h4>';
     html += '<table class="kpi-tbl"><thead><tr><th>지표</th>' + TEAMS.map(t=>`<th${t==='서광주'?' style="color:#22D3EE"':''}>` + t + '</th>').join('') + '<th>목표</th></tr></thead><tbody>';
     KPI_DEF.forEach(def => {
-      html += '<tr' + (true ? '' : '') + '>';
+      html += '<tr>';
       html += `<td style="text-align:left;color:#94A3B8">${def.label}</td>`;
       TEAMS.forEach(team => {
         const v = getVal(d, team, def.key);
         const cls = team==='서광주' ? ' class="'+valClass(v,def)+'"' : '';
-        html += `<td${cls}>${v!=null?v+'%':'-'}</td>`;
+        html += `<td${cls}>${v\!=null?v+'%':'-'}</td>`;
       });
       html += `<td style="color:#475569">${def.tgtLine}%</td></tr>`;
     });
@@ -1212,7 +1254,7 @@ document.getElementById('modalOverlay').addEventListener('click', function(e){
 ═══════════════════════════════ */
 document.addEventListener('DOMContentLoaded', function() {
   // 기본 날짜 필터: 이번 달 1일 ~ 오늘
-  const today= new Date();
+  const today = new Date();
   const y = today.getFullYear();
   const m = String(today.getMonth()+1).padStart(2,'0');
   const d = String(today.getDate()).padStart(2,'0');
