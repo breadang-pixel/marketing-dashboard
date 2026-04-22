@@ -1,9 +1,10 @@
+<!-- last-updated: 2026-04-20 09:00:00 -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>서광주팀 KPI 대시보드</title>
+  <title>서광주팀 Marketing Report</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
   <style>
@@ -19,7 +20,7 @@
     .btn-p{background:#22D3EE;color:#0F172A;}
     .btn-s{background:#334155;color:#F8FAFC;}
     /* KPI Cards */
-    .kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(135px,1fr));gap:10px;margin-bottom:16px;}
+    .kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:10px;margin-bottom:16px;}
     .kpi-card{background:#1E293B;border-radius:8px;padding:11px 13px;position:relative;overflow:hidden;}
     .kpi-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;}
     .kc-good::before{background:#34D399;}
@@ -93,7 +94,7 @@
 <body>
 
 <div class="header">
-  <h1>📊 서광주팀 KPI 대시보드</h1>
+  <h1>📊 서광주팀 Marketing Report</h1>
   <p>팀별 실적 비교 · 달성률 추이 분석 | Marketing Daily Flow</p>
 </div>
 
@@ -108,6 +109,7 @@
     <option value="o10">010</option>
     <option value="mnp">MNP신규(MNO)</option>
     <option value="mvno">MVNO-IN</option>
+    <option value="arpu">매출ARPU</option>
     <option value="broadband">초고속</option>
     <option value="iptv">IPTV</option>
     <option value="rate1g">1G유치율</option>
@@ -153,6 +155,7 @@
           <th>010</th>
           <th>MNP</th>
           <th>MVNO</th>
+          <th>매출ARPU</th>
           <th>초고속</th>
           <th>IPTV</th>
           <th>1G유치율</th>
@@ -382,21 +385,36 @@ const DAILY_DATA = [
     date:"2026-04-14",
     summary:"본부 무선 정책 당일 변경(S26 CW추가·와이드8·M140·아15 단가 보강). 유선 4-3호 정책 시행으로 동판 수익성 조정. 010 일실적 83건(49%)/월실적 38%. NPS 요금수납 75.5% 저조. 서광주 소성장 전사 대비 120% 수준 유지.",
     mood:"중립",
-    wireless:{
-      new:83,
-      mnp:null,
-      fiveG:null,
-      achievement:49,
-      notes:"010 일목표 169건 중 15:50기준 83건(49%). 월실적 1,393건(38%). MVNO 일 65건(76%), 월 1,342건(51%). 기변 프리미엄비중 92%(목표90% 초과). S26 CW공시MNP/기변+2만, 선약기변+4만, 와이드8 MNP+3만, M140+5만, 아15+10만."
+    teams:{
+      "동광주":{
+        o10:{achievement:83.7},mnp:{achievement:112.6},mvno:{achievement:126.8},
+        arpu:{achievement:102.1},broadband:{achievement:101.7},iptv:{achievement:103.7},
+        rate1g:{target:34.0,actual:36.4},rateGiga:{target:90.0,actual:94.2},
+        rateTac:{target:42.0,actual:46.6},rateMas:{target:38.0,actual:36.2},
+        rateNps:{target:86.0,actual:88.7},rateTarget:{target:55.0,actual:34.2}
+      },
+      "서광주":{
+        o10:{achievement:80.4},mnp:{achievement:99.0},mvno:{achievement:101.8},
+        arpu:{achievement:105.9},broadband:{achievement:119.4},iptv:{achievement:136.5},
+        rate1g:{target:34.0,actual:43.2},rateGiga:{target:90.0,actual:96.6},
+        rateTac:{target:42.0,actual:47.6},rateMas:{target:38.0,actual:44.2},
+        rateNps:{target:86.0,actual:85.9},rateTarget:{target:55.0,actual:41.8}
+      },
+      "전북":{
+        o10:{achievement:101.6},mnp:{achievement:91.0},mvno:{achievement:94.2},
+        arpu:{achievement:100.0},broadband:{achievement:134.3},iptv:{achievement:142.4},
+        rate1g:{target:34.0,actual:34.0},rateGiga:{target:90.0,actual:99.0},
+        rateTac:{target:42.0,actual:39.9},rateMas:{target:38.0,actual:34.6},
+        rateNps:{target:86.0,actual:85.8},rateTarget:{target:55.0,actual:25.0}
+      },
+      "제주(합산)":{
+        o10:{achievement:77.6},mnp:{achievement:130.9},mvno:{achievement:96.5},
+        arpu:{achievement:101.4},broadband:{achievement:105.5},iptv:{achievement:95.4},
+        rate1g:{target:34.0,actual:53.8},rateGiga:{target:90.0,actual:98.1},
+        rateTac:{target:42.0,actual:43.0},rateMas:{target:38.0,actual:33.0},
+        rateNps:{target:86.0,actual:84.7},rateTarget:{target:55.0,actual:33.3}
+      }
     },
-    wired:{
-      broadband:9,
-      iptv:null,
-      achievement:null,
-      notes:"전일(4/13) 초고속 9건/MNP 27건(동판율 33% 저조). 유선정책 4-3호(4/14~): 동판기간 이+초+티 2만원 축소, 중고MNP 연계 유선 2만원 축소."
-    },
-    device:{sales:null, notes:"당일 배정: S26군·S25FE·아17·A17·A36. M166 재고 소진 독려(2Q 후속모델 예정). TAC+·마스콜3 20% 미만 대리점 단말배정 불이익."},
-    nps:{score:75.5, notes:"요금수납 NPS 75.5%(⚠최저). 번호변경 80.0%, 부가서비스 78.4% 주의. T-Campus T Focus 응대가이드 4종 전직원 이수 의무."},
     keyEvents:[
       "무선 정책 당일 변경: S26 CW공시/선약 추가, 와이드8·M140·아이폰15 단가 보강 (9:30 즉시 적용)",
       "유선 정책 4-3호(4/14~) 시행: 동판 2만원 축소, 중고MNP 연계 유선 2만원 축소",
@@ -414,24 +432,503 @@ const DAILY_DATA = [
     policyChanges:"무선: S26 제조사CW 공시/선약 추가단가, 와이드8 MNP+3만/기변+2만, M140+5만, 아15+10만. 유선 정책 4-3호(4/14~): 동판기간 이+초+티 2만원 축소, 중고MNP 연계 2만원 축소.",
     distributionNotes:"VD등급 대시보드 1Q 가마감 반영 업데이트. 봄맞이 매장환경개선 캠페인 진행중(VD1점, 마감4/24). 마스콜3 해외여행 컨테스트 진행(3~4월). 소성장 서광주 전사대비 120% 수준.",
     isWeeklyGenerated:false
+  },
+  {
+    date:"2026-04-15",
+    summary:"010순증 일 61% 마감(105건/173건). 본부장 Make-up 지시. S26공시기변 -2만·중고세이브 6→8만·ZEM 15→18만 정책변경. 유선 초고속 118.5%·IPTV 121.1% 강세. 타사단골 JUMP UP 오늘 마감.",
+    mood:"중립",
+    wireless:{
+      new:105,
+      mnp:null,
+      fiveG:null,
+      achievement:61,
+      notes:"일목표 173건 대비 105건(61%). MVNO 92건(110%). 월예상달성률 85.5%(소매계). 정책변경: S26공시기변 -2만, 세이브 6→8만, ZEM 15→18만. 비정상 해지 급증으로 본부장 Make-up 지시."
+    },
+    wired:{
+      broadband:null,
+      iptv:null,
+      achievement:118,
+      notes:"초고속 예상달성률 118.5%(소매계). IPTV 121.1%. 서광주 초고속 117%·IPTV 134.6% 강세. 1G유치율 40.4%(목표 34%), Giga 96.4%."
+    },
+    teams:{
+      "동광주":{o10:{achievement:null},mnp:{achievement:118},broadband:{achievement:101.7},iptv:{achievement:96.3},rateTac:{target:42,actual:46.6},rateMas:{target:38,actual:36.2},rateNps:{target:86,actual:90.0}},
+      "서광주":{o10:{achievement:null},mnp:{achievement:106},broadband:{achievement:117.0},iptv:{achievement:134.6},rateTac:{target:42,actual:47.6},rateMas:{target:38,actual:43.4},rateNps:{target:86,actual:86.7}},
+      "전북":{o10:{achievement:null},mnp:{achievement:92.5},broadband:{achievement:134.0},iptv:{achievement:139.3},rateTac:{target:42,actual:39.9},rateMas:{target:38,actual:34.8},rateNps:{target:86,actual:83.3}},
+      "제주(합산)":{o10:{achievement:null},mnp:{achievement:131.5},broadband:{achievement:104.4},iptv:{achievement:98.4},rateTac:{target:42,actual:43.0},rateMas:{target:38,actual:33.5},rateNps:{target:86,actual:86.7}}
+    },
+    device:{sales:null, notes:"S731 단말배정. TAC+ 45.9%(소매계). 마스콜3 35.5%(목표 38% 미달). 0건: 그린·주안. 소매구독챔피언 42.7% / 지급예상 7,610,000원."},
+    nps:{score:87.4, notes:"소매계 비판매성 87.4%(목표 86% 초과). 동광주 90.0%/서광주 86.7%/전북 83.3%/제주 86.7%. 4/15 NPS 소명 공지. T-Campus 교육 4종 전직원 이수 의무화."},
+    keyEvents:[
+      "010순증 일 61%(105건/173건) — 본부장 Make-up 지시, 비정상 해지 급증 대응",
+      "정책변경: S26공시기변 -2만·SIM/중고세이브 6→8만·ZEM 15→18만원 (010순증 부양)",
+      "타사단골 JUMP UP(4/1~15) 오늘 마감 — 서광주팀 53건 달성",
+      "단골캠페인 MMS 장애 발생→오후 복구 / 요금제 UP-Sell MMS 4/15~16 전매장 필수 발송",
+      "T-Campus 비판매성 응대가이드 교육 4종 이수 의무화 (정성평가 항목 각 0.2점)"
+    ],
+    nextActions:[
+      "010순증 Make-up — 세이브 8만·ZEM 18만 신규 단가 전 대리점 공지 및 비정상 해지 밀착 관리",
+      "요금제 UP-Sell 단골MMS 4/16 마감 전 전매장 발송 완료 확인",
+      "마스콜3 0건(그린·주안)·20%미만(대산·백산·티원) 즉시 유치 액션",
+      "T-Campus 교육 4종 미이수자 이번 주 완료 독촉",
+      "T안심보상 미수취 10개 대리점 4/17(금) 최종 독촉"
+    ],
+    policyChanges:"S26군 공시기변 -2만원(4/15). SIM/중고 세이브 6만→8만. ZEM M166 15만→18만. M166 재고소진 독려. 요금제 UP-Sell 단골MMS(4/15~16).",
+    distributionNotes:"타사단골 JUMP UP 4/15 마감. 단골MMS 장애 복구. SG컨테스트: A그룹 무등금프(53pt)·B그룹 우성본점(29pt)·C그룹 오룡(40pt). 하트리그 4월 통계 공유.",
+    isWeeklyGenerated:false
+  },
+  {
+    date:"2026-04-16",
+    summary:"010 정책 대폭 강화 — 중고포함 일 2건시 건당 15만 추가지급(목~월). S26공시 +5만·ZEM -10만. 유선 4-2호 Swing(4/1 소급). 16시 일실적 102건(57%)·월말예상 72%로 +11%p 개선. 서광주 67%·제주 62% 본부 하위권.",
+    mood:"중립",
+    wireless:{
+      new:102,
+      mnp:null,
+      fiveG:null,
+      achievement:57,
+      notes:"일목표 174건 대비 16시 102건(57%). 월실적 1,627건(45%). 월말예상 달성률 72%(전일+11%p). 서광주 67%·제주 62%(본부 하위권). ARPU 104.9%·기변 프리미엄 90%·공시비중 62%."
+    },
+    wired:{
+      broadband:null,
+      iptv:null,
+      achievement:113,
+      notes:"초고속 예상달성률 113.6%(서광주, 4/15 기준 최종안정실적 139). IPTV 132.8%. 1G유치율 41.5%/Giga 97.1%. 유선 정책 4-2호 Swing(4/1 소급) 공지: 안심기가 와이파이/안심쉐어 기가 와이파이 유치건 5만원."
+    },
+    teams:{
+      "동광주":{
+        o10:      {target:797, actual:338, achievement:84.8},
+        mnp:      {target:637, actual:363, achievement:114.1},
+        mvno:     {target:215, actual:146, achievement:135.4},
+        arpu:     {target:74789, actual:75713, achievement:101.2},
+        broadband:{target:320, actual:133, achievement:95.6},
+        iptv:     {target:330, actual:139, achievement:94.6},
+        rate1g:   {target:34.0, actual:40.0},
+        rateGiga: {target:90.0, actual:93.8},
+        rateTac:  {target:42.0, actual:94.7},
+        rateMas:  {target:38.0, actual:44.8},
+        rateNps:  {target:86.0, actual:89.6},
+        rateTarget:{target:55.0, actual:42.7}
+      },
+      "서광주":{
+        o10:      {target:784, actual:312, achievement:79.6},
+        mnp:      {target:582, actual:308, achievement:105.8},
+        mvno:     {target:199, actual:110, achievement:110.2},
+        arpu:     {target:73717, actual:77304, achievement:104.9},
+        broadband:{target:311, actual:139, achievement:113.6},
+        iptv:     {target:305, actual:174, achievement:132.8},
+        rate1g:   {target:34.0, actual:41.5},
+        rateGiga: {target:90.0, actual:97.1},
+        rateTac:  {target:42.0, actual:96.8},
+        rateMas:  {target:38.0, actual:46.0},
+        rateNps:  {target:86.0, actual:87.2},
+        rateTarget:{target:55.0, actual:49.1}
+      },
+      "전북":{
+        o10:      {target:473, actual:239, achievement:101.1},
+        mnp:      {target:445, actual:205, achievement:92.3},
+        mvno:     {target:164, actual:80,  achievement:97.8},
+        arpu:     {target:74617, actual:73870, achievement:99.0},
+        broadband:{target:189, actual:107, achievement:124.8},
+        iptv:     {target:197, actual:120, achievement:129.3},
+        rate1g:   {target:34.0, actual:35.0},
+        rateGiga: {target:90.0, actual:97.4},
+        rateTac:  {target:42.0, actual:98.2},
+        rateMas:  {target:38.0, actual:39.1},
+        rateNps:  {target:86.0, actual:81.8},
+        rateTarget:{target:55.0, actual:34.4}
+      },
+      "제주(합산)":{
+        o10:      {target:403, actual:155, achievement:76.9},
+        mnp:      {target:420, actual:266, achievement:126.6},
+        mvno:     {target:146, actual:76,  achievement:104.4},
+        arpu:     {target:75513, actual:76375, achievement:101.1},
+        broadband:{target:145, actual:69,  achievement:100.5},
+        iptv:     {target:146, actual:66,  achievement:95.7},
+        rate1g:   {target:34.0, actual:52.5},
+        rateGiga: {target:90.0, actual:98.7},
+        rateTac:  {target:42.0, actual:94.7},
+        rateMas:  {target:38.0, actual:42.8},
+        rateNps:  {target:86.0, actual:87.3},
+        rateTarget:{target:55.0, actual:51.3}
+      }
+    },
+    device:{sales:null, notes:"0416 단말 배정 A17/아17. 마스콜3 44.8%(목표 42% 초과). 0건: 그린·주안. 20%미만: 대산·백산·티원. 40%미만: 목포·옥주·남선·태경·엠코리아·주도·다린컴즈. 소매구독챔피언 38%↑60%/40%↑80%/42%↑100%."},
+    nps:{score:87.2, notes:"NPS 87.2%(목표 86% 초과). 4/14 요금수납건 비추천·중립 발생 → 요금수납 응대 PDF 2종 배포. 착석권유+베스트톡 필수 재강조."},
+    keyEvents:[
+      "[팀정책] 중고포함 010 일 2건시 본부 10만+팀 OCB 5만 = 건당 15만원 추가지급(목~월 4일)",
+      "[본부정책] S26 공시기변 +5만 강화·ZEM -10만 축소. 소매 4-12호 V2: M140 선약010 +5만(세이브~레플)",
+      "[유선] 정책 4-2호 Swing(4/1 소급) — 안심기가 와이파이/안심쉐어 유치건 5만원",
+      "[010 실시간] 16시 102건(57%)·월실적 1,627건·월말예상 72%(+11%p)",
+      "[유통망] 판매자 개입 비정상 해지 자제 당부. 대리점별 해지가이드·월말 초과반영 관리 지시"
+    ],
+    nextActions:[
+      "010 중고 정책 최대 활용 — 서광주·제주 대리점 일 20건 중고010 재배분, 건당 15만 추가정책 재공지",
+      "마스콜3 0건(그린·주안) 긴급 방문 + 20%미만(대산·백산·티원) 코칭 일정 확정",
+      "요금제 UP-Sell 단골MMS 미완료 18개 매장 당일 발송 완료 확인",
+      "유선 정책 4-2호 Swing 소급분 점검(4/1~15 개통 안심기가 유치건 5만원 소급정산)",
+      "전략점 익일(4/17 금) 단가 공지 수신 즉시 전파 + 주말 포함 4일 운영 수량목표 수립"
+    ],
+    policyChanges:"[무선-본부] S26 공시기변 +5만, ZEM -10만 축소. 소매 4-12호 V2: M140 선약010 +5만(세이브~레플). [무선-팀] 중고포함 010 일2건시 본부10+팀OCB5=건당15만 추가(목~월). 010 일그레이드 2건이상 건당10만. [유선-팀] 4-2호 Swing 안심기가 와이파이 유치 5만(4/1 소급). [전략점] 금~월 운영 연장, 단가 익일 공지.",
+    distributionNotes:"요금제 UP-Sell 단골MMS 3회 독려(17시 기준 미완료 18개 매장). NPS 요금수납 응대가이드 재강조. 봄맞이 매장환경개선(VD1점·하트리그2점, 마감4/24). 매장등급제 4월 집중관리 17개 매장 공유. 타사단골 MNP땡겨요 57/70건(81%). AI Study 10:30→10:00 조정.",
+    isWeeklyGenerated:false
+  },
+  {
+    date:"2026-04-17",
+    summary:"LG 유심교체로 L-MNP 132%↑ 수요 고조. 010순증 서광주 예상 81.9% — 주말 그레이드(S33↑ 7만) 집중 영업. 본사 비정상 영업 강화·010목표 소폭 축소 공표. 유선(초고속 113.6%·IPTV 130.4%) 우수. NPS 2차 이벤트 개시.",
+    mood:"중립",
+    wireless:{
+      new:138,
+      mnp:null,
+      fiveG:null,
+      achievement:78,
+      notes:"16:40 기준 일실적 138건(78%), 월실적 1,856건(51%), 월말예상 77%. 서광주 예상달성률 81.9%(목표 784건). MNP 108.1% 양호. L-MNP 전주대비 132%↑. ARPU 77,039원(104.5%). 주말그레이드: S33↑ 3건↑ 건당 7만원."
+    },
+    wired:{
+      broadband:null,
+      iptv:null,
+      achievement:113,
+      notes:"초고속 예상달성률 113.6%(목표311, 실적186, 예상353). IPTV 130.4%(실적196). 유선 정책 4-3호_v2 4.20(월)까지 연장. Giga 유지율 97.3%, 1G 유지율 41.9%."
+    },
+    teams:{
+      "동광주":{
+        o10:      {target:797, actual:407, achievement:95.3},
+        mnp:      {target:637, actual:381, achievement:111.7},
+        mvno:     {target:215, actual:155, achievement:134.4},
+        arpu:     {target:74789, actual:75695, achievement:101.2},
+        broadband:{target:320, actual:140, achievement:93.3},
+        iptv:     {target:330, actual:147, achievement:92.6},
+        rate1g:   {target:34.0, actual:41.6},
+        rateGiga: {target:90.0, actual:94.2},
+        rateTac:  {target:42.0, actual:93.8},
+        rateMas:  {target:38.0, actual:44.0},
+        rateNps:  {target:86.0, actual:89.9},
+        rateTarget:{target:55.0, actual:44.4}
+      },
+      "서광주":{
+        o10:      {target:784, actual:344, achievement:81.9},
+        mnp:      {target:582, actual:337, achievement:108.1},
+        mvno:     {target:199, actual:121, achievement:113.1},
+        arpu:     {target:73717, actual:77039, achievement:104.5},
+        broadband:{target:311, actual:156, achievement:113.6},
+        iptv:     {target:305, actual:187, achievement:130.4},
+        rate1g:   {target:34.0, actual:41.9},
+        rateGiga: {target:90.0, actual:97.3},
+        rateTac:  {target:42.0, actual:97.1},
+        rateMas:  {target:38.0, actual:45.2},
+        rateNps:  {target:86.0, actual:87.6},
+        rateTarget:{target:55.0, actual:50.9}
+      },
+      "전북":{
+        o10:      {target:473, actual:250, achievement:98.7},
+        mnp:      {target:445, actual:227, achievement:95.2},
+        mvno:     {target:164, actual:91,  achievement:103.6},
+        arpu:     {target:74617, actual:73606, achievement:98.6},
+        broadband:{target:189, actual:116, achievement:122.1},
+        iptv:     {target:197, actual:127, achievement:124.9},
+        rate1g:   {target:34.0, actual:35.2},
+        rateGiga: {target:90.0, actual:97.5},
+        rateTac:  {target:42.0, actual:97.4},
+        rateMas:  {target:38.0, actual:38.4},
+        rateNps:  {target:86.0, actual:83.6},
+        rateTarget:{target:55.0, actual:37.5}
+      },
+      "제주(합산)":{
+        o10:      {target:403, actual:190, achievement:88.0},
+        mnp:      {target:420, actual:280, achievement:124.7},
+        mvno:     {target:146, actual:82,  achievement:105.1},
+        arpu:     {target:75513, actual:76388, achievement:101.2},
+        broadband:{target:145, actual:73,  achievement:98.8},
+        iptv:     {target:146, actual:71,  achievement:95.0},
+        rate1g:   {target:34.0, actual:54.0},
+        rateGiga: {target:90.0, actual:98.5},
+        rateTac:  {target:42.0, actual:95.1},
+        rateMas:  {target:38.0, actual:41.9},
+        rateNps:  {target:86.0, actual:85.9},
+        rateTarget:{target:55.0, actual:56.2}
+      }
+    },
+    device:{sales:null, notes:"S26 단골특가 캠페인(54만원, 4/17~20). S25 FE 특가(24만원) 병행. TAC+ 서광주 97.1%(목표 90% 양호). 마스콜3 서광주 45.2%(목표 42% 초과). 0건: 한국정보·그린·주안."},
+    nps:{score:87.6, notes:"NPS 비판매성 87.6%(목표 86% 달성). 2차이벤트 개시(4/16~29, NPS 90%↑ & 샘플 8건↑). 포상: 알콜솜 3BOX+나드여행용품5종세트. NPS대시보드 본부 전체 업그레이드."},
+    keyEvents:[
+      "[본사방침] 010 비정상 영업 강화 & 010순증 목표 소폭 축소 예정 공표 — 실수요 중심 영업 요구",
+      "[시장동향] LG 유심교체 효과: L-MNP 전주대비 132%↑, K-MNP 105%↑ — 번호이동 수요 고조",
+      "[단말판촉] S26 단골특가 MMS 발송 — S26 54만원(71만 할인) & S25 FE 24만원, 4/17~20",
+      "[NPS] 2차 이벤트 개시(4/16~29) & NPS 대시보드 본부 전체 업그레이드 완료",
+      "[단말] 삼성 2026 신모델 로드맵 공유 — A37(6월), M17 와이드9(7~8월), FF8(8월), A57(8~9월)"
+    ],
+    nextActions:[
+      "주말 010 집중 — 서광주 74% 극복: S33↑ 3건↑ 건당 7만원 그레이드 매장별 목표 확인",
+      "MMS 미완료 59개점 단골 시나리오(S26 특가) 발송 독촉 — 4/20 캠페인 종료 전 완료",
+      "마스콜3 0건(한국정보·그린·주안) 및 40% 미달 8개점 긴급 연락 및 소매구독챔피언 수혜 안내",
+      "타사단골모집율 55% 달성 집중 — UIT·중고MNP 5건 미만 대리점 자체 시나리오 발송 지원",
+      "교육 VD가점 이수 독촉 — 쌍방향 교육(마감 4/21) 미이수자 주말 내 완료 요청"
+    ],
+    policyChanges:"[무선-본부] 010 주말 그레이드(금~월): S33↑ 3건↑ 건당 7만원. S26 전유형 3/5/7만원. [팀] OCB 추가 5만원. [유선] 4-3호_v2 4.20까지 연장. [전략점] 소매M 3차(4/17~20) M166 선약 60만/UIT 55만. 010순증 목표 소폭 축소 예정.",
+    distributionNotes:"단골MMS 발송: 완료 51개점/미완료 59개점(4월3차). 타사단골 5건 미만 대리점 목록 배포. SG Infra 유선달성+010미달 손실금액 공유. 숨은가족찾기 CONTEST(4/1~30). MAMF Adobe Express(4/24까지, 하트리그3점).",
+    isWeeklyGenerated:false
+  },
+  {
+    date:"2026-04-19",
+    summary:"주말(일요일) — 신규 카카오톡 데이터 없음. 마지막 영업일(4/17 금) 기준 서광주 010 예상달성률 81.9%, MNP 108.1%, ARPU 104.5%, 유선 초고속 122.1%, IPTV 130.4% 양호. 4/20(월) 유선 정책 만료·S26 특가 캠페인 종료.",
+    mood:"중립",
+    wireless:{
+      new:null,
+      mnp:null,
+      fiveG:null,
+      achievement:null,
+      notes:"주말(일요일) 무데이터. 참고: 4/17 기준 서광주 010 예상달성률 81.9%, MNP 108.1%, ARPU 104.5%."
+    },
+    wired:{
+      broadband:null,
+      iptv:null,
+      achievement:null,
+      notes:"주말(일요일) 무데이터. 참고: 4/17 기준 초고속 122.1%, IPTV 130.4%."
+    },
+    teams:{
+      "동광주":{
+        o10:      {target:797, actual:null, achievement:null},
+        mnp:      {target:637, actual:null, achievement:null},
+        mvno:     {target:215, actual:null, achievement:null},
+        arpu:     {target:74789, actual:null, achievement:null},
+        broadband:{target:320, actual:null, achievement:null},
+        iptv:     {target:330, actual:null, achievement:null},
+        rate1g:   {target:34.0, actual:null},
+        rateGiga: {target:90.0, actual:null},
+        rateTac:  {target:42.0, actual:null},
+        rateMas:  {target:38.0, actual:null},
+        rateNps:  {target:86.0, actual:null},
+        rateTarget:{target:55.0, actual:null}
+      },
+      "서광주":{
+        o10:      {target:784, actual:null, achievement:null},
+        mnp:      {target:582, actual:null, achievement:null},
+        mvno:     {target:199, actual:null, achievement:null},
+        arpu:     {target:73717, actual:null, achievement:null},
+        broadband:{target:311, actual:null, achievement:null},
+        iptv:     {target:305, actual:null, achievement:null},
+        rate1g:   {target:34.0, actual:null},
+        rateGiga: {target:90.0, actual:null},
+        rateTac:  {target:42.0, actual:null},
+        rateMas:  {target:38.0, actual:null},
+        rateNps:  {target:86.0, actual:null},
+        rateTarget:{target:55.0, actual:null}
+      },
+      "전북":{
+        o10:      {target:473, actual:null, achievement:null},
+        mnp:      {target:445, actual:null, achievement:null},
+        mvno:     {target:164, actual:null, achievement:null},
+        arpu:     {target:74617, actual:null, achievement:null},
+        broadband:{target:189, actual:null, achievement:null},
+        iptv:     {target:197, actual:null, achievement:null},
+        rate1g:   {target:34.0, actual:null},
+        rateGiga: {target:90.0, actual:null},
+        rateTac:  {target:42.0, actual:null},
+        rateMas:  {target:38.0, actual:null},
+        rateNps:  {target:86.0, actual:null},
+        rateTarget:{target:55.0, actual:null}
+      },
+      "제주(합산)":{
+        o10:      {target:403, actual:null, achievement:null},
+        mnp:      {target:420, actual:null, achievement:null},
+        mvno:     {target:146, actual:null, achievement:null},
+        arpu:     {target:75513, actual:null, achievement:null},
+        broadband:{target:145, actual:null, achievement:null},
+        iptv:     {target:146, actual:null, achievement:null},
+        rate1g:   {target:34.0, actual:null},
+        rateGiga: {target:90.0, actual:null},
+        rateTac:  {target:42.0, actual:null},
+        rateMas:  {target:38.0, actual:null},
+        rateNps:  {target:86.0, actual:null},
+        rateTarget:{target:55.0, actual:null}
+      }
+    },
+    device:{sales:null, notes:"주말(일요일) 무데이터. S26 특가 캠페인(4/17~20) 마무리 단계."},
+    nps:{score:null, notes:"주말(일요일) 무데이터. 참고: 4/17 기준 서광주 NPS 비판매성 87.6%."},
+    keyEvents:[
+      "주말(일요일) — 신규 카카오톡 데이터 없음",
+      "4/17(금) 마지막 영업일: 서광주 010 예상달성률 81.9%, MNP 108.1%",
+      "유선 초고속 122.1%, IPTV 130.4% — 전국 평균 대비 우수",
+      "S26 단골특가 캠페인 4/20(월) 종료 예정",
+      "유선 정책 4-3호_v2 4/20(월) 만료 예정"
+    ],
+    nextActions:[
+      "주말 010 실적 집계 후 서광주 81.9% 개선 여부 확인 및 월요일 추가 독려",
+      "MMS 미발송 59개점 단골 시나리오 4/20 종료 전 완료 처리",
+      "마스콜3 0건(한국정보·그린·주안) 및 40%미만 8개점 월요일 긴급 조치",
+      "유선 정책 4-3호_v2 만료 전 마지막 청약 기회 최대 활용",
+      "타사단골모집율 37.5% → 55% 목표 달성 위한 긴급 집중 관리"
+    ],
+    policyChanges:"주말 무데이터. 4/20(월) 유선 정책 4-3호_v2 만료 예정.",
+    distributionNotes:"주말 무데이터. S26 단골특가 캠페인 4/20(월) 종료 예정.",
+    isWeeklyGenerated:false
+  }
+,
+  {
+    date:"2026-04-20",
+    summary:"010·MVNO 목표 하향 발표(010 -10%/MVNO -6%). 전략점 4차 운영(4/21~23) 예고 — 사실상 마지막 차수. 서광주 010 월말예상 달성률 98%(15:50 기준). MNP·ARPU·초고속·IPTV 목표 초과 달성 지속. 마스콜3 44.6%(목표 42%), NPS 87.8%(목표 86%).",
+    mood:"긍정",
+    wireless:{
+      new:133,
+      mnp:334,
+      fiveG:null,
+      achievement:99.1,
+      notes:"010 예상달성률 99.1%(19일기준). MNP 106.1%, MVNO 103.3%, ARPU 103.8%. 010 Grade 정책(금~월 3건→건당7만) 오늘 마감. 타사단골MNP OCB 선착순70건 달성으로 정책 종료."
+    },
+    wired:{
+      broadband:175,
+      iptv:216,
+      achievement:116.1,
+      notes:"초고속 예상달성률 116.1%, IPTV 127.3%. Giga유치율 96.6%(목표34%). 1G유치율 41.7%(목표40%). SG Infra 수혜예상: 인천|남선|무등|태주|티원|대동."
+    },
+    teams:{
+      "동광주":{
+        o10:      {target:718, actual:476,  achievement:109.2},
+        mnp:      {target:832, actual:404,  achievement:118.2},
+        mvno:     {target:213, actual:149,  achievement:126.1},
+        arpu:     {target:74789, actual:75571, achievement:101.0},
+        broadband:{target:320, actual:153,  achievement:91.1},
+        iptv:     {target:330, actual:164,  achievement:91.0},
+        rate1g:   {target:34.0, actual:40.7},
+        rateGiga: {target:34.0, actual:94.6},
+        rateTac:  {target:90.0, actual:94.2},
+        rateMas:  {target:42.0, actual:43.7},
+        rateNps:  {target:86.0, actual:89.8},
+        rateTarget:{target:55.0, actual:47.9}
+      },
+      "서광주":{
+        o10:      {target:705, actual:424,  achievement:99.1},
+        mnp:      {target:445, actual:334,  achievement:106.1},
+        mvno:     {target:199, actual:114,  achievement:103.3},
+        arpu:     {target:73717, actual:76532, achievement:103.8},
+        broadband:{target:189, actual:175,  achievement:116.1},
+        iptv:     {target:305, actual:216,  achievement:127.3},
+        rate1g:   {target:40.0, actual:41.7},
+        rateGiga: {target:34.0, actual:96.6},
+        rateTac:  {target:90.0, actual:97.3},
+        rateMas:  {target:42.0, actual:44.6},
+        rateNps:  {target:86.0, actual:87.8},
+        rateTarget:{target:55.0, actual:56.4}
+      },
+      "전북":{
+        o10:      {target:426, actual:295,  achievement:111.7},
+        mnp:      {target:445, actual:237,  achievement:99.7},
+        mvno:     {target:164, actual:95,   achievement:103.8},
+        arpu:     {target:74617, actual:74103, achievement:99.3},
+        broadband:{target:189, actual:122,  achievement:116.1},
+        iptv:     {target:197, actual:133,  achievement:118.4},
+        rate1g:   {target:40.0, actual:36.7},
+        rateGiga: {target:34.0, actual:97.7},
+        rateTac:  {target:90.0, actual:97.3},
+        rateMas:  {target:42.0, actual:38.7},
+        rateNps:  {target:86.0, actual:84.7},
+        rateTarget:{target:55.0, actual:39.1}
+      },
+      "제주(합산)":{
+        o10:      {target:481, actual:241,  achievement:82.5},
+        mnp:      {target:420, actual:280,  achievement:121.2},
+        mvno:     {target:146, actual:95,   achievement:107.6},
+        arpu:     {target:75513, actual:76688, achievement:101.6},
+        broadband:{target:145, actual:81,   achievement:100.0},
+        iptv:     {target:146, actual:79,   achievement:96.5},
+        rate1g:   {target:40.0, actual:52.2},
+        rateGiga: {target:34.0, actual:98.3},
+        rateTac:  {target:90.0, actual:95.2},
+        rateMas:  {target:42.0, actual:42.0},
+        rateNps:  {target:86.0, actual:87.9},
+        rateTarget:{target:55.0, actual:null}
+      }
+    },
+    device:{sales:null, notes:"마스콜3 44.6%(서광주), TAC+ 97.3%. 0건 대리점: 한국정보·그린·주안. 소매구독챔피언: 38%↑60%/40%↑80%/42%↑100% 지급."},
+    nps:{score:87.8, notes:"서광주 NPS 비판매성 87.8%(목표86%). 남선 문흥점·상무점 0.0% 관리 필요. T-Campus 비판매성 4개 과정 전직원 이수 관리."},
+    keyEvents:[
+      "010·MVNO 목표 하향 공지 — 010신규 10%·MVNO 6% 즉시 하향(본부 강현욱)",
+      "전략점 4차 운영 확정(4/21~23) — 와8 선약 60만/UIT 선약 50만, 4차 후 조기 종료 가능성 높음",
+      "010 Grade 정책(금~월 3건→건당7만) 오늘 마감 + 타사단골MNP OCB 선착순70건 달성 종료",
+      "OCB 제세정보 등록 마감 임박 (~4/24) — 3월 단말보험TAC+ 5만원 초과 크루 필수",
+      "마스콜3 0건 대리점 3곳(한국정보·그린·주안) 긴급 독려·봄맞이 IMC 캠페인 미참여 다수"
+    ],
+    nextActions:[
+      "전략점 4차 단가 수령 즉시 대리점별 배분 및 4/21~23 MNP 집중 실행 지시",
+      "하향 조정 목표 반영 후 서광주 잔여 010/MVNO 목표 재산출 및 매장별 재배분",
+      "마스콜3 0건 대리점 3곳(한국정보·그린·주안) 오전 중 긴급 콜 독려",
+      "OCB 제세정보 미등록 크루 확인 및 등록 완료 독려 (~4/24 마감)",
+      "봄맞이 IMC 캠페인·교육 미이수자 4/24(금) 추가차수 수강 안내"
+    ],
+    policyChanges:"010신규 10%·MVNO 6% 목표 하향. 전략점 4차(4/21~23, 와8 선약60만/UIT 선약50만). OCB 제세정보 등록 ~4/24. 본부 쌍방향 교육 추가차수 4/24 10시.",
+    distributionNotes:"온라인 주례 회의 4/20 15:30 Zoom(파트장·이동정책 실무). 봄맞이 IMC 캠페인 미참여 매장 다수(한국 본점·옥주·남선 풍암/금호 등). 요금제 UP-Sell MMS 재발송 독려. SG Select PT 확대 실적 상위: 백현·서해 남악·수완프리미엄.",
+    isWeeklyGenerated:false
+  }
+  ,{
+    date:"2026-04-21",
+    summary:"카카오톡 데이터 미수신일. 전략점 4차(4/21~23) 운영 진입 — MNP 집중 실행 기간. 서광주 010 달성률 99.1%(전일참조), MNP 106.1%, ARPU 103.8%, 초고속 116.1%, IPTV 127.3%.",
+    mood:"중립",
+    wireless:{
+      new:null,
+      mnp:null,
+      fiveG:null,
+      achievement:99.1,
+      notes:"4/21 실시간 데이터 없음. 전일(4/20) 참조: 010 달성 99.1%, MNP 106.1%, MVNO 103.3%, ARPU 103.8%. 전략점 4차(4/21~23) 운영 진입."
+    },
+    wired:{
+      broadband:null,
+      iptv:null,
+      achievement:116.1,
+      notes:"4/21 실시간 데이터 없음. 전일(4/20) 참조: 초고속 116.1%, IPTV 127.3%, Giga유치율 96.6%, 1G유치율 41.7%."
+    },
+    teams:{
+      "서광주":{
+        o10:      {target:705, actual:424,  achievement:99.1},
+        mnp:      {target:445, actual:334,  achievement:106.1},
+        mvno:     {target:199, actual:114,  achievement:103.3},
+        arpu:     {target:73717, actual:76532, achievement:103.8},
+        broadband:{target:189, actual:175,  achievement:116.1},
+        iptv:     {target:305, actual:216,  achievement:127.3},
+        rate1g:   {target:40.0, actual:41.7},
+        rateGiga: {target:34.0, actual:96.6},
+        rateTac:  {target:90.0, actual:97.3},
+        rateMas:  {target:42.0, actual:44.6},
+        rateNps:  {target:86.0, actual:87.8},
+        rateTarget:{target:55.0, actual:56.4}
+      }
+    },
+    device:{sales:null, notes:"금일 관련 데이터 없음"},
+    nps:{score:87.8, notes:"전일(4/20) 참조: 서광주 87.8%(목표86%). 남선 문흥점·상무점 0.0% 관리 필요."},
+    keyEvents:[
+      "카카오톡 데이터 미수신 — 전략점 4차(4/21~23) 운영 진입 시점",
+      "010·MVNO 목표 하향 공지 — 010신규 10%·MVNO 6% 즉시 하향 (본부 강현욱)",
+      "전략점 4차 운영 시작 — 와8 선약 60만/UIT 선약 50만, 4차 후 조기 종료 가능성",
+      "OCB 제세정보 등록 마감 임박 (~4/24) — 3월 단말보험 TAC+ 5만원 초과 크루 필수",
+      "마스콜3 0건 대리점 3곳(한국정보·그린·주안) 긴급 독려 필요"
+    ],
+    nextActions:[
+      "전략점 4차 중간 실적 점검 — 4/21~23 MNP 실행 현황 취합 및 목표 대비 GAP 분석",
+      "하향 조정 목표 기반 서광주 잔여 010/MVNO 목표 재산출 — 매장별 일별 분해 재배분",
+      "OCB 제세정보 미등록 크루 최종 확인 및 긴급 독려 (마감 4/24 이틀 전)",
+      "마스콜3 0건 대리점(한국정보·그린·주안) 당일 실적 1건 이상 확보 현황 확인",
+      "봄맞이 IMC 캠페인 미참여 매장 4/22 내 완료 지시 및 4/24 추가 교육 수강 안내"
+    ],
+    policyChanges:"010신규 10%·MVNO 6% 목표 하향 확정. 전략점 4차(4/21~23, 와8 선약60만/UIT 선약50만). OCB 제세정보 등록 ~4/24. 본부 쌍방향 교육 추가차수 4/24 10시.",
+    distributionNotes:"전략점 4차 단가 배분 완료 필요. 마스콜3 0건 대리점(한국정보·그린·주안) 긴급 독려. 봄맞이 IMC 캠페인 미참여 매장 참여 독려. NPS 남선 문흥점·상무점 0.0% 관리.",
+    isWeeklyGenerated:false
   }
 ];
+
 
 /* ═══════════════════════════════
    KPI METRIC DEFINITIONS
 ═══════════════════════════════ */
 const KPI_DEF = [
-  {key:'o10',       label:'010',          isRate:false, tgtLine:100, unit:'%달성'},
-  {key:'mnp',       label:'MNP신규',      isRate:false, tgtLine:100, unit:'%달성'},
-  {key:'mvno',      label:'MVNO-IN',      isRate:false, tgtLine:100, unit:'%달성'},
-  {key:'broadband', label:'초고속',        isRate:false, tgtLine:100, unit:'%달성'},
-  {key:'iptv',      label:'IPTV',          isRate:false, tgtLine:100, unit:'%달성'},
-  {key:'rate1g',    label:'1G유치율',      isRate:true,  tgtLine:34,  unit:'%'},
-  {key:'rateGiga',  label:'Giga유치율',    isRate:true,  tgtLine:90,  unit:'%'},
-  {key:'rateTac',   label:'TAC+유치율',    isRate:true,  tgtLine:42,  unit:'%'},
-  {key:'rateMas',   label:'마스콜3',       isRate:true,  tgtLine:38,  unit:'%'},
-  {key:'rateNps',   label:'NPS_비판매성',  isRate:true,  tgtLine:86,  unit:'%'},
-  {key:'rateTarget',label:'타사단골모집율', isRate:true,  tgtLine:55,  unit:'%'}
+  {key:'o10',        label:'010',           isRate:false, tgtLine:100, unit:'%달성'},
+  {key:'mnp',        label:'MNP신규',       isRate:false, tgtLine:100, unit:'%달성'},
+  {key:'mvno',       label:'MVNO-IN',       isRate:false, tgtLine:100, unit:'%달성'},
+  {key:'arpu',       label:'매출ARPU',      isRate:false, tgtLine:100, unit:'%달성'},
+  {key:'broadband',  label:'초고속',        isRate:false, tgtLine:100, unit:'%달성'},
+  {key:'iptv',       label:'IPTV',          isRate:false, tgtLine:100, unit:'%달성'},
+  {key:'rate1g',     label:'1G유치율',      isRate:true,  tgtLine:34,  unit:'%'},
+  {key:'rateGiga',   label:'Giga유치율',    isRate:true,  tgtLine:90,  unit:'%'},
+  {key:'rateTac',    label:'TAC+유치율',    isRate:true,  tgtLine:42,  unit:'%'},
+  {key:'rateMas',    label:'마스콜3',       isRate:true,  tgtLine:38,  unit:'%'},
+  {key:'rateNps',    label:'NPS_비판매성',  isRate:true,  tgtLine:86,  unit:'%'},
+  {key:'rateTarget', label:'타사단골모집율',isRate:true,  tgtLine:55,  unit:'%'}
 ];
 
 const TEAMS = ['동광주','서광주','전북','제주(합산)'];
@@ -441,138 +938,187 @@ const T_COLOR = {'동광주':'#6366F1','서광주':'#22D3EE','전북':'#F59E0B',
    HELPERS
 ═══════════════════════════════ */
 function getVal(entry, team, key) {
-  if (!entry||!entry.teams||!entry.teams[team]||!entry.teams[team][key]) return null;
-  const m=entry.teams[team][key];
-  const def=KPI_DEF.find(d=>d.key===key);
+  if (!entry || !entry.teams || !entry.teams[team] || !entry.teams[team][key]) return null;
+  const m = entry.teams[team][key];
+  const def = KPI_DEF.find(d => d.key === key);
   if (!def) return null;
-  return def.isRate ? (m.actual!=null?m.actual:null) : (m.achievement!=null?m.achievement:null);
+  return def.isRate ? (m.actual != null ? m.actual : null) : (m.achievement != null ? m.achievement : null);
 }
-function statusClass(val,def){
-  if(val==null)return'';
-  const r=val/def.tgtLine;
-  if(r>=1.05)return'kc-good';if(r>=1.00)return'kc-ok';if(r>=0.90)return'kc-warn';return'kc-bad';
+function statusClass(val, def) {
+  if (val == null) return '';
+  const r = val / def.tgtLine;
+  if (r >= 1.05) return 'kc-good';
+  if (r >= 1.00) return 'kc-ok';
+  if (r >= 0.90) return 'kc-warn';
+  return 'kc-bad';
 }
-function valClass(val,def){
-  if(val==null)return'vn';
-  const r=val/def.tgtLine;
-  if(r>=1.05)return'vg';if(r>=1.00)return'vo';if(r>=0.90)return'vw';return'vb';
+function valClass(val, def) {
+  if (val == null) return 'vn';
+  const r = val / def.tgtLine;
+  if (r >= 1.05) return 'vg';
+  if (r >= 1.00) return 'vo';
+  if (r >= 0.90) return 'vw';
+  return 'vb';
 }
 
 /* ═══════════════════════════════
    STATE & FILTER
 ═══════════════════════════════ */
-let filtered=[], chartMap={};
+let filtered = [], chartMap = {};
 
-function applyFilter(){
-  const from=document.getElementById('dateFrom').value, to=document.getElementById('dateTo').value;
-  filtered=DAILY_DATA.filter(d=>{
-    if(from&&d.date<from)return false;
-    if(to&&d.date>to)return false;
+function applyFilter() {
+  const from = document.getElementById('dateFrom').value;
+  const to   = document.getElementById('dateTo').value;
+  const metric = document.getElementById('metricFilter').value;
+  filtered = DAILY_DATA.filter(d => {
+    if (from && d.date < from) return false;
+    if (to   && d.date > to)   return false;
     return true;
-  }).sort((a,b)=>b.date.localeCompare(a.date));
-  renderAll(filtered, document.getElementById('metricFilter').value);
+  }).sort((a,b) => b.date.localeCompare(a.date));
+  renderAll(filtered, metric);
 }
-function resetFilter(){
-  document.getElementById('dateFrom').value='';
-  document.getElementById('dateTo').value='';
-  document.getElementById('metricFilter').value='all';
-  filtered=[...DAILY_DATA].sort((a,b)=>b.date.localeCompare(a.date));
-  renderAll(filtered,'all');
+
+function resetFilter() {
+  document.getElementById('dateFrom').value = '';
+  document.getElementById('dateTo').value   = '';
+  document.getElementById('metricFilter').value = 'all';
+  filtered = [...DAILY_DATA].sort((a,b) => b.date.localeCompare(a.date));
+  renderAll(filtered, 'all');
+}
+
+function switchTab(idx) {
+  document.querySelectorAll('.tab-panel').forEach((p,i) => p.classList.toggle('active', i===idx));
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', i===idx));
 }
 
 /* ═══════════════════════════════
    RENDER ALL
 ═══════════════════════════════ */
-function renderAll(data,metric){
+function renderAll(data, metric) {
   renderKPICards(data);
-  renderCompareCharts(data,metric);
-  renderTrendCharts(data,metric);
+  renderCompareCharts(data, metric);
+  renderTrendCharts(data, metric);
   renderTable(data);
 }
 
 /* ═══════════════════════════════
-   KPI CARDS (서광주 latest)
+   KPI CARDS (최신일 서광주 기준)
+   - 수량 지표(010/MNP/MVNO/초고속/IPTV)는 잔여 일목표(건) 표시
+   - 남은 영업일 = 기준일 다음날~월말, 일요일 제외
 ═══════════════════════════════ */
-function renderKPICards(data){
-  const withTeams=data.filter(d=>d.teams&&d.teams['서광주']).sort((a,b)=>b.date.localeCompare(a.date));
-  const latest=withTeams[0];
-  const el=document.getElementById('kpiCards');
-  if(!latest){el.innerHTML='';return;}
-  const sg=latest.teams['서광주'];
-  let html='';
-  KPI_DEF.forEach(def=>{
-    const t=sg[def.key]; if(!t)return;
-    const val=def.isRate?t.actual:t.achievement;
-    if(val==null)return;
-    const tgt=def.isRate?(t.target||def.tgtLine):def.tgtLine;
-    const sc=statusClass(val,def);
-    html+='<div class="kpi-card '+sc+'"><div class="lbl">서광주 '+def.label+'</div><div class="val">'+val+'%</div><div class="sub">목표 '+tgt+'% · '+latest.date+'</div></div>';
-  });
-  el.innerHTML=html||'<p style="color:#475569;font-size:0.8rem">팀 데이터 없음</p>';
+function getRemainingBusinessDays(dateStr) {
+  const d = new Date(dateStr + 'T00:00:00');
+  const yr = d.getFullYear(); const mo = d.getMonth();
+  const lastDay = new Date(yr, mo+1, 0).getDate();
+  let count = 0;
+  for (let day = d.getDate()+1; day <= lastDay; day++) {
+    const dt = new Date(yr, mo, day);
+    if (dt.getDay() !== 0) count++;
+  }
+  return count;
+}
+function renderKPICards(data) {
+  const withTeams = data.filter(d => d.teams && d.teams['서광주']).sort((a,b) => b.date.localeCompare(a.date));
+  const latest = withTeams[0];
+  const el = document.getElementById('kpiCards');
+  if (!latest || !latest.teams) { el.innerHTML = '<p style="color:#475569;padding:8px">팀별 데이터 없음</p>'; return; }
+  const sg = latest.teams['서광주'];
+  const remainDays = getRemainingBusinessDays(latest.date);
+  const qtyKeys = ['o10','mnp','mvno','broadband','iptv'];
+  el.innerHTML = KPI_DEF.map(def => {
+    const t = sg[def.key]; if (!t) return '';
+    const val = def.isRate ? t.actual : t.achievement;
+    const tgt = def.isRate ? (t.target || def.tgtLine) : def.tgtLine;
+    const sc  = statusClass(val, def);
+    let extraLine = '';
+    if (qtyKeys.includes(def.key) && t.target != null && t.actual != null && remainDays > 0) {
+      const rem = t.target - t.actual;
+      const daily = rem > 0 ? Math.ceil(rem / remainDays) : 0;
+      extraLine = `<div class="sub" style="color:#FBBF24;font-weight:700;margin-top:3px">⚡ 잔여 일목표: ${daily}건</div>
+                   <div class="sub" style="color:#64748B;font-size:0.6rem">목표 ${t.target.toLocaleString()} / 실적 ${t.actual.toLocaleString()} (${remainDays}영업일)</div>`;
+    }
+    return `<div class="kpi-card ${sc}">
+      <div class="lbl">${def.label}</div>
+      <div class="val">${val != null ? val + '%' : '-'}</div>
+      <div class="sub">목표 ${tgt}% | ${latest.date}</div>
+      ${extraLine}
+    </div>`;
+  }).join('');
 }
 
 /* ═══════════════════════════════
-   COMPARE CHARTS (팀별 bar)
+   COMPARE CHARTS (팀별 최신일 Bar)
 ═══════════════════════════════ */
-function renderCompareCharts(data,metricFilter){
-  const grid=document.getElementById('compareGrid');
-  const withTeams=data.filter(d=>d.teams).sort((a,b)=>b.date.localeCompare(a.date));
-  const latest=withTeams[0];
-  Object.keys(chartMap).filter(k=>k.startsWith('cmp_')).forEach(k=>{if(chartMap[k]){chartMap[k].destroy();delete chartMap[k];}});
-  const metricsToShow=metricFilter==='all'?KPI_DEF:KPI_DEF.filter(d=>d.key===metricFilter);
-  if(!latest){
-    grid.innerHTML='<p style="color:#475569;padding:20px;grid-column:1/-1;font-size:0.82rem">선택 기간에 팀 비교 데이터가 없습니다.</p>';
-    return;
-  }
-  grid.innerHTML=metricsToShow.map(def=>
-    '<div class="chart-card"><h3><em>'+def.label+'</em> 팀별 '+(def.isRate?'유치율':'예상달성률')+' ('+latest.date+')</h3><canvas id="cmp_'+def.key+'"></canvas></div>'
+function renderCompareCharts(data, metricFilter) {
+  const grid = document.getElementById('compareGrid');
+  const withTeams = data.filter(d => d.teams).sort((a,b) => b.date.localeCompare(a.date));
+  const latest = withTeams[0];
+  Object.keys(chartMap).filter(k => k.startsWith('cmp_')).forEach(k => { if(chartMap[k]){ chartMap[k].destroy(); delete chartMap[k]; } });
+  const metricsToShow = metricFilter==='all' ? KPI_DEF : KPI_DEF.filter(d => d.key===metricFilter);
+  grid.innerHTML = metricsToShow.map(def =>
+    `<div class="chart-card"><h3>팀별 <em>${def.label}</em> ${def.isRate?'유치율':'달성률'} 비교</h3><canvas id="cmp_${def.key}"></canvas></div>`
   ).join('');
-  metricsToShow.forEach(def=>{
-    const canvas=document.getElementById('cmp_'+def.key); if(!canvas)return;
-    const vals=TEAMS.map(t=>getVal(latest,t,def.key));
-    const bgColors=TEAMS.map(t=>t==='서광주'?'#22D3EE':T_COLOR[t]+'55');
-    const borderColors=TEAMS.map(t=>t==='서광주'?'#22D3EE':T_COLOR[t]+'AA');
-    const borderWidths=TEAMS.map(t=>t==='서광주'?2.5:1);
-    chartMap['cmp_'+def.key]=new Chart(canvas,{
-      type:'bar',
-      data:{labels:TEAMS,datasets:[
-        {label:def.isRate?'유치율(%)':'달성률(%)',data:vals,backgroundColor:bgColors,borderColor:borderColors,borderWidth:borderWidths,order:2},
-        {type:'line',label:'목표 '+def.tgtLine+'%',data:TEAMS.map(()=>def.tgtLine),borderColor:'#EF444488',borderWidth:1.5,borderDash:[5,5],pointRadius:0,fill:false,order:1}
-      ]},
-      options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){
-        if(ctx.datasetIndex===0){const v=ctx.raw;return(def.isRate?'유치율: ':'달성률: ')+(v!=null?v+'%':'-');}
-        return ctx.dataset.label;
-      }}}},scales:{
-        x:{ticks:{color:function(ctx){return TEAMS[ctx.index]==='서광주'?'#22D3EE':'#94A3B8';},font:function(ctx){return{weight:TEAMS[ctx.index]==='서광주'?'700':'400',size:11};}},grid:{color:'#334155'}},
-        y:{ticks:{color:'#94A3B8',font:{size:10}},grid:{color:'#334155'},beginAtZero:false}
-      }}
+  if (!latest) return;
+  metricsToShow.forEach(def => {
+    const canvas = document.getElementById('cmp_'+def.key); if (!canvas) return;
+    const vals         = TEAMS.map(t => getVal(latest, t, def.key));
+    const bgColors     = TEAMS.map(t => t==='서광주' ? '#22D3EE' : T_COLOR[t]+'55');
+    const borderColors = TEAMS.map(t => t==='서광주' ? '#22D3EE' : T_COLOR[t]+'AA');
+    const borderWidths = TEAMS.map(t => t==='서광주' ? 2.5 : 1);
+    chartMap['cmp_'+def.key] = new Chart(canvas, {
+      type: 'bar',
+      data: {
+        labels: TEAMS,
+        datasets: [
+          { data: vals, backgroundColor: bgColors, borderColor: borderColors, borderWidth: borderWidths },
+          { data: TEAMS.map(() => def.tgtLine), type:'line', borderColor:'#EF444466', borderWidth:1.5, borderDash:[4,4], pointRadius:0, fill:false }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend:{display:false}, tooltip:{ callbacks:{ label:function(ctx){
+          if(ctx.datasetIndex===0){ const v=ctx.raw; return (def.isRate?'유치율: ':'달성률: ')+(v!=null?v+'%':'-'); }
+          return ctx.dataset.label;
+        }}}},
+        scales: {
+          x: { ticks:{ color:function(ctx){ return TEAMS[ctx.index]==='서광주'?'#22D3EE':'#94A3B8'; }, font:function(ctx){ return {weight:TEAMS[ctx.index]==='서광주'?'700':'400', size:11}; }}, grid:{color:'#334155'} },
+          y: { ticks:{color:'#94A3B8',font:{size:10}}, grid:{color:'#334155'}, beginAtZero:false }
+        }
+      }
     });
   });
 }
 
 /* ═══════════════════════════════
-   TREND CHARTS (서광주 line)
+   TREND CHARTS (서광주 Line)
 ═══════════════════════════════ */
-function renderTrendCharts(data,metricFilter){
-  const grid=document.getElementById('trendGrid');
-  const sorted=[...data].sort((a,b)=>a.date.localeCompare(b.date));
-  Object.keys(chartMap).filter(k=>k.startsWith('trd_')).forEach(k=>{if(chartMap[k]){chartMap[k].destroy();delete chartMap[k];}});
-  const metricsToShow=metricFilter==='all'?KPI_DEF:KPI_DEF.filter(d=>d.key===metricFilter);
-  grid.innerHTML=metricsToShow.map(def=>
-    '<div class="chart-card"><h3>서광주 <em>'+def.label+'</em> '+(def.isRate?'유치율':'달성률')+' 추이</h3><canvas id="trd_'+def.key+'"></canvas></div>'
+function renderTrendCharts(data, metricFilter) {
+  const grid = document.getElementById('trendGrid');
+  const sorted = [...data].sort((a,b) => a.date.localeCompare(b.date));
+  Object.keys(chartMap).filter(k => k.startsWith('trd_')).forEach(k => { if(chartMap[k]){ chartMap[k].destroy(); delete chartMap[k]; } });
+  const metricsToShow = metricFilter==='all' ? KPI_DEF : KPI_DEF.filter(d => d.key===metricFilter);
+  grid.innerHTML = metricsToShow.map(def =>
+    `<div class="chart-card"><h3>서광주 <em>${def.label}</em> ${def.isRate?'유치율':'달성률'} 추이</h3><canvas id="trd_${def.key}"></canvas></div>`
   ).join('');
-  metricsToShow.forEach(def=>{
-    const canvas=document.getElementById('trd_'+def.key); if(!canvas)return;
-    chartMap['trd_'+def.key]=new Chart(canvas,{
-      type:'line',
-      data:{labels:sorted.map(d=>d.date.slice(5)),datasets:[
-        {label:'서광주',data:sorted.map(d=>getVal(d,'서광주',def.key)),borderColor:'#22D3EE',backgroundColor:'#22D3EE22',tension:0.3,fill:true,pointRadius:5,pointBackgroundColor:'#22D3EE',spanGaps:false,order:2},
-        {label:'목표 '+def.tgtLine+'%',data:sorted.map(()=>def.tgtLine),borderColor:'#EF444466',borderWidth:1.5,borderDash:[4,4],pointRadius:0,fill:false,order:1}
-      ]},
-      options:{responsive:true,plugins:{legend:{labels:{color:'#94A3B8',font:{size:10},boxWidth:12}}},scales:{
-        x:{ticks:{color:'#94A3B8',font:{size:10}},grid:{color:'#334155'}},
-        y:{ticks:{color:'#94A3B8',font:{size:10}},grid:{color:'#334155'}}
-      }}
+  metricsToShow.forEach(def => {
+    const canvas = document.getElementById('trd_'+def.key); if (!canvas) return;
+    chartMap['trd_'+def.key] = new Chart(canvas, {
+      type: 'line',
+      data: {
+        labels: sorted.map(d => d.date.slice(5)),
+        datasets: [
+          { label:'서광주', data:sorted.map(d=>getVal(d,'서광주',def.key)), borderColor:'#22D3EE', backgroundColor:'#22D3EE22', tension:0.3, fill:true, pointRadius:5, pointBackgroundColor:'#22D3EE', spanGaps:false },
+          { label:'목표 '+def.tgtLine+'%', data:sorted.map(()=>def.tgtLine), borderColor:'#EF444466', borderWidth:1.5, borderDash:[4,4], pointRadius:0, fill:false }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend:{labels:{color:'#94A3B8',font:{size:10},boxWidth:12}} },
+        scales: {
+          x: { ticks:{color:'#94A3B8',font:{size:10}}, grid:{color:'#334155'} },
+          y: { ticks:{color:'#94A3B8',font:{size:10}}, grid:{color:'#334155'}} 
+        }
+      }
     });
   });
 }
@@ -580,22 +1126,100 @@ function renderTrendCharts(data,metricFilter){
 /* ═══════════════════════════════
    TABLE
 ═══════════════════════════════ */
-function fmtCell(val,def){
-  if(val==null)return'<span class="vn">-</span>';
-  return'<span class="'+valClass(val,def)+'">'+val+'%</span>';
-}
-function renderTable(data){
-  let html='';
-  data.forEach(function(d){
-    let cells='';
-    KPI_DEF.forEach(function(def){cells+='<td>'+fmtCell(getVal(d,'서광주',def.key),def)+'</td>';});
-    const moodCls=d.mood==='긍정'?'bp':d.mood==='부정'?'bb':'bn';
-    const wk=d.isWeeklyGenerated?'<span class="badge bwk">주간</span>':'';
-    const ev=(d.keyEvents||[]).slice(0,1).join('')||'';
-    const evTrim=ev.length>28?ev.slice(0,28)+'…':ev;
-    html+='<tr onclick="openModal(\''+d.date+'\')"><td class="tl">'+d.date+wk+'</td>'+cells+'<td class="tl"><span class="badge '+moodCls+'">'+(d.mood||'중립')+'</span> <span style="color:#475569;font-size:0.68rem">'+evTrim+'</span></td></tr>';
-  });
-  document.getElementById('tableBody').innerHTML=html;
+function fmtCell(val, def) {
+  if (val == null) return '<span class="vn">-</span>';
+  return '<span class="'+valClass(val,def)+'">'+val+'%</span>';
 }
 
-/
+function renderTable(data) {
+  let html = '';
+  data.forEach(function(d) {
+    let cells = '';
+    KPI_DEF.forEach(function(def) {
+      cells += '<td>' + fmtCell(getVal(d,'서광주',def.key), def) + '</td>';
+    });
+    const moodBadge = d.mood==='긍정' ? '<span class="badge bp">긍정</span>' :
+                      d.mood==='부정' ? '<span class="badge bb">부정</span>' :
+                      '<span class="badge bn">중립</span>';
+    const wkBadge = d.isWeeklyGenerated ? '<span class="badge bwk">주간</span>' : '';
+    const topIssue = d.keyEvents && d.keyEvents[0] ? d.keyEvents[0].slice(0,30)+'…' : (d.summary||'').slice(0,30)+'…';
+    html += `<tr onclick="openModal('${d.date}')">
+      <td class="tl"><strong>${d.date}</strong></td>
+      ${cells}
+      <td class="tl">${moodBadge}${wkBadge} <span style="color:#94A3B8;font-size:0.7rem">${topIssue}</span></td>
+    </tr>`;
+  });
+  document.getElementById('tableBody').innerHTML = html || '<tr><td colspan="14" style="color:#475569;padding:16px">데이터 없음</td></tr>';
+}
+
+/* ═══════════════════════════════
+   MODAL
+═══════════════════════════════ */
+function openModal(date) {
+  const d = DAILY_DATA.find(x => x.date===date);
+  if (!d) return;
+  document.getElementById('modalTitle').textContent = '📅 ' + d.date + ' 상세 리포트';
+  let html = '';
+  // 요약
+  html += `<div class="msec"><h4>오늘의 요약</h4><p>${d.summary||'-'}</p></div>`;
+  // 주요 이슈
+  if (d.keyEvents && d.keyEvents.length) {
+    html += '<div class="msec"><h4>주요 이슈 TOP 5</h4><ul>' + d.keyEvents.map(e=>`<li>${e}</li>`).join('') + '</ul></div>';
+  }
+  // AI 추천
+  if (d.nextActions && d.nextActions.length) {
+    html += '<div class="msec"><h4>AI 추천 액션</h4><ul>' + d.nextActions.map(a=>`<li>${a}</li>`).join('') + '</ul></div>';
+  }
+  // 정책 변경
+  if (d.policyChanges) {
+    html += `<div class="msec"><h4>정책 변경</h4><p>${d.policyChanges}</p></div>`;
+  }
+  // 유통망
+  if (d.distributionNotes) {
+    html += `<div class="msec"><h4>유통망 소통</h4><p>${d.distributionNotes}</p></div>`;
+  }
+  // KPI 팀별 비교 (teams 데이터 있을 경우)
+  if (d.teams) {
+    html += '<div class="msec"><h4>팀별 KPI 현황</h4>';
+    html += '<table class="kpi-tbl"><thead><tr><th>지표</th>' + TEAMS.map(t=>`<th${t==='서광주'?' style="color:#22D3EE"':''}>` + t + '</th>').join('') + '<th>목표</th></tr></thead><tbody>';
+    KPI_DEF.forEach(def => {
+      html += '<tr' + (true ? '' : '') + '>';
+      html += `<td style="text-align:left;color:#94A3B8">${def.label}</td>`;
+      TEAMS.forEach(team => {
+        const v = getVal(d, team, def.key);
+        const cls = team==='서광주' ? ' class="'+valClass(v,def)+'"' : '';
+        html += `<td${cls}>${v!=null?v+'%':'-'}</td>`;
+      });
+      html += `<td style="color:#475569">${def.tgtLine}%</td></tr>`;
+    });
+    html += '</tbody></table></div>';
+  }
+  document.getElementById('modalContent').innerHTML = html;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+// ESC 키로 모달 닫기
+document.addEventListener('keydown', function(e){
+  if (e.key==='Escape') document.getElementById('modalOverlay').classList.remove('open');
+});
+// 오버레이 클릭으로 모달 닫기
+document.getElementById('modalOverlay').addEventListener('click', function(e){
+  if (e.target===this) this.classList.remove('open');
+});
+
+/* ═══════════════════════════════
+   INIT — 페이지 로드 시 자동 실행
+═══════════════════════════════ */
+document.addEventListener('DOMContentLoaded', function() {
+  // 기본 날짜 필터: 이번 달 1일 ~ 오늘
+  const today = new Date();
+  const y = today.getFullYear();
+  const m = String(today.getMonth()+1).padStart(2,'0');
+  const d = String(today.getDate()).padStart(2,'0');
+  document.getElementById('dateFrom').value = y+'-'+m+'-01';
+  document.getElementById('dateTo').value   = y+'-'+m+'-'+d;
+  resetFilter();
+});
+</script>
+</body>
+</html>
