@@ -1,4 +1,4 @@
-<!-- last-updated: 2026-04-28 00:19:03 -->
+<!-- last-updated: 2026-04-28 03:17:52 -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -1250,10 +1250,50 @@ const DAILY_DATA = [
     policyChanges:"S26 OCB 프로모션(4/24~27), 기간그레이드(4/24~27) 지속. 별도 신규 정책 없음.",
     distributionNotes:"주말 영업일 아님. OCB·기간그레이드 마감(4/27) 집중.",
     teams:{
-      "동광주":{o10:592, mnp:505, mvno:0, arpu:75295, broadband:236, iptv:233, rate1g:0, rateGiga:0, rateTac:43.7, rateMas:35.6, rateNps:88.6, rateTarget:107.4},
-      "서광주":{o10:587, mnp:418, mvno:0, arpu:76164, broadband:260, iptv:269, rate1g:41.8, rateGiga:96.2, rateTac:45.0, rateMas:40.1, rateNps:87.4, rateTarget:108.4},
-      "전북":{o10:345, mnp:321, mvno:0, arpu:74154, broadband:139, iptv:152, rate1g:0, rateGiga:0, rateTac:40.1, rateMas:40.2, rateNps:85.4, rateTarget:105.5},
-      "제주(합산)":{o10:279, mnp:344, mvno:0, arpu:76568, broadband:98, iptv:100, rate1g:0, rateGiga:0, rateTac:41.5, rateMas:33.1, rateNps:87.8, rateTarget:100.1}
+      "동광주":{
+        o10:{achievement:107.4, target:718, actual:592},
+        mnp:{achievement:117.1, target:637, actual:505},
+        mvno:{achievement:142.3, actual:182},
+        arpu:{achievement:100.7, target:74789, actual:75295},
+        broadband:{achievement:98.2, target:307, actual:236},
+        iptv:{achievement:97.2, target:317, actual:233},
+        rate1g:{actual:39.8}, rateGiga:{actual:93.2},
+        rateTac:{actual:43.7}, rateMas:{actual:35.6},
+        rateNps:{target:86.0, actual:88.6}, rateTarget:{target:55.0, actual:51.3}
+      },
+      "서광주":{
+        o10:{achievement:108.4, target:705, actual:587},
+        mnp:{achievement:104.6, target:582, actual:418},
+        mvno:{achievement:129.8, actual:155},
+        arpu:{achievement:103.3, target:73717, actual:76164},
+        broadband:{achievement:106.1, target:309, actual:260},
+        iptv:{achievement:114.5, target:292, actual:269},
+        rate1g:{actual:41.8}, rateGiga:{actual:96.2},
+        rateTac:{actual:45.0}, rateMas:{actual:40.1},
+        rateNps:{target:86.0, actual:87.4}, rateTarget:{target:55.0, actual:67.3}
+      },
+      "전북":{
+        o10:{achievement:105.5, target:426, actual:345},
+        mnp:{achievement:106.8, target:445, actual:321},
+        mvno:{achievement:145.9, actual:141},
+        arpu:{achievement:99.4, target:74617, actual:74154},
+        broadband:{achievement:103.0, target:181, actual:139},
+        iptv:{achievement:103.4, target:188, actual:152},
+        rate1g:{actual:40.0}, rateGiga:{actual:97.9},
+        rateTac:{actual:40.1}, rateMas:{actual:40.2},
+        rateNps:{target:86.0, actual:85.4}, rateTarget:{target:55.0, actual:51.6}
+      },
+      "제주(합산)":{
+        o10:{achievement:100.1, target:363, actual:279},
+        mnp:{achievement:116.8, target:440, actual:344},
+        mvno:{achievement:152.5, actual:142},
+        arpu:{achievement:101.4, target:75513, actual:76568},
+        broadband:{achievement:93.2, target:139, actual:98},
+        iptv:{achievement:92.1, target:140, actual:100},
+        rate1g:{actual:56.1}, rateGiga:{actual:98.7},
+        rateTac:{actual:41.5}, rateMas:{actual:33.1},
+        rateNps:{target:86.0, actual:87.8}, rateTarget:{target:55.0, actual:null}
+      }
     },
     isWeeklyGenerated:true
   },
@@ -1282,10 +1322,50 @@ const DAILY_DATA = [
     policyChanges:"당일 정책 변경 없음. 예고: 익일(4/28) S26 그레이드 단가 일부 축소. 010 기간그레이드(3건↑ 5만) 오늘 만료.",
     distributionNotes:"MVNO MNP 5월 이월 요청(서광주). 4/30 해지 가능회선 파악(28일 14시까지). SKN 5월 연휴 배송 일정 공지.",
     teams:{
-      "동광주":{o10:620, mnp:538, mvno:191, arpu:75797, broadband:234, iptv:235, rate1g:40.2, rateGiga:93.2, rateTac:43.4, rateMas:35.5, rateNps:88.7, rateTarget:55.6},
-      "서광주":{o10:635, mnp:470, mvno:176, arpu:76295, broadband:246, iptv:263, rate1g:41.5, rateGiga:96.4, rateTac:45.0, rateMas:40.4, rateNps:88.1, rateTarget:70.9},
-      "전북":{o10:331, mnp:349, mvno:143, arpu:74361, broadband:149, iptv:155, rate1g:41.3, rateGiga:98.1, rateTac:40.9, rateMas:41.3, rateNps:86.3, rateTarget:62.5},
-      "제주(합산)":{o10:300, mnp:364, mvno:144, arpu:76502, broadband:108, iptv:105, rate1g:57.3, rateGiga:98.5, rateTac:42.0, rateMas:33.4, rateNps:87.1, rateTarget:56.4}
+      "동광주":{
+        o10:{achievement:102.9, target:718, actual:620},
+        mnp:{achievement:114.1, target:637, actual:538},
+        mvno:{achievement:136.4, actual:191},
+        arpu:{achievement:101.3, target:74789, actual:75797},
+        broadband:{achievement:95.9, target:307, actual:234},
+        iptv:{achievement:93.1, target:317, actual:235},
+        rate1g:{actual:40.2}, rateGiga:{actual:93.2},
+        rateTac:{actual:43.4}, rateMas:{actual:35.5},
+        rateNps:{target:86.0, actual:88.7}, rateTarget:{target:55.0, actual:55.6}
+      },
+      "서광주":{
+        o10:{achievement:107.3, target:705, actual:635},
+        mnp:{achievement:107.8, target:582, actual:470},
+        mvno:{achievement:135.7, actual:176},
+        arpu:{achievement:103.5, target:73717, actual:76295},
+        broadband:{achievement:104.4, target:309, actual:246},
+        iptv:{achievement:112.7, target:292, actual:263},
+        rate1g:{actual:41.5}, rateGiga:{actual:96.4},
+        rateTac:{actual:45.0}, rateMas:{actual:40.4},
+        rateNps:{target:86.0, actual:88.1}, rateTarget:{target:55.0, actual:70.9}
+      },
+      "전북":{
+        o10:{achievement:105.4, target:426, actual:331},
+        mnp:{achievement:106.2, target:445, actual:349},
+        mvno:{achievement:135.3, actual:143},
+        arpu:{achievement:99.7, target:74617, actual:74361},
+        broadband:{achievement:102.0, target:181, actual:149},
+        iptv:{achievement:101.6, target:188, actual:155},
+        rate1g:{actual:41.3}, rateGiga:{actual:98.1},
+        rateTac:{actual:40.9}, rateMas:{actual:41.3},
+        rateNps:{target:86.0, actual:86.3}, rateTarget:{target:55.0, actual:62.5}
+      },
+      "제주(합산)":{
+        o10:{achievement:98.5, target:363, actual:300},
+        mnp:{achievement:112.9, target:420, actual:364},
+        mvno:{achievement:141.5, actual:144},
+        arpu:{achievement:101.3, target:75513, actual:76502},
+        broadband:{achievement:95.2, target:139, actual:108},
+        iptv:{achievement:91.4, target:140, actual:105},
+        rate1g:{actual:57.3}, rateGiga:{actual:98.5},
+        rateTac:{actual:42.0}, rateMas:{actual:33.4},
+        rateNps:{target:86.0, actual:87.1}, rateTarget:{target:55.0, actual:56.4}
+      }
     },
     isWeeklyGenerated:false
   }
@@ -1576,10 +1656,11 @@ document.getElementById('modal').addEventListener('click',function(e){if(e.targe
 document.addEventListener('DOMContentLoaded', function() {
   const dates = DAILY_DATA.map(d=>d.date).sort();
   if (dates.length) {
-    document.getElementById('dateFrom').value = dates[0];
+    document.getElementById('dateFrom').value = dates[Math.max(0,dates.length-14)];
     document.getElementById('dateTo').value   = dates[dates.length-1];
   }
-  applyFilter();
+  filtered = [...DAILY_DATA].sort((a,b) => b.date.localeCompare(a.date));
+  renderAll(filtered, 'all');
 });
 </script>
 </body>
