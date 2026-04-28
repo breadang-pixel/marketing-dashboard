@@ -1,4 +1,4 @@
-<!-- last-updated: 2026-04-28 09:15:07 -->
+<!-- last-updated: 2026-04-28 00:19:03 -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -1256,6 +1256,38 @@ const DAILY_DATA = [
       "제주(합산)":{o10:279, mnp:344, mvno:0, arpu:76568, broadband:98, iptv:100, rate1g:0, rateGiga:0, rateTac:41.5, rateMas:33.1, rateNps:87.8, rateTarget:100.1}
     },
     isWeeklyGenerated:true
+  },
+  {
+    date:"2026-04-27",
+    summary:"월말 마감 총력 모드. 소매 010 예비비 3,000만원 긴급 배정(동광주1010만/서광주990만/전북600만/제주410만). 010 당일해지 123건(가이드110건 초과). S26 기간달성률 70%(진도율60%), 익일 단가 축소 예정. 경쟁사 S26 유입 감지. 5월 연휴 물량 선확보 긴급 요청.",
+    mood:"부정",
+    wireless:{new:186, mnp:0, fiveG:0, achievement:87, notes:"010 일실적 186건(69%)/월실적 2,855건(87%). 당일해지 123건 초과. S26 171건(70%)."},
+    wired:{broadband:737, iptv:758, achievement:103, notes:"초고속 예상달성103%·IPTV 예상달성103.3%(청약반영 기준)"},
+    device:{sales:171, notes:"S26 기간달성률70%(진도율60%). 익일 단가 축소 예정."},
+    nps:{score:87.9, notes:"NPS 비관매성 소매 87.9%. 비추천 매장 모니터링 지속."},
+    keyEvents:[
+      "소매 010 마감 예비비 3,000만원 긴급 배정 — 동광주1010만/서광주990만/전북600만/제주410만",
+      "010 당일해지 123건 발생(가이드 110건 초과) — 통제 가능 회선 5월 초 이월 긴급 지시",
+      "S26 익일(4/28) 단가 축소 예정 확정 — 당일 최대 개통 집중 독려",
+      "경쟁사 S26 유입 및 판매점 빠른 대응 감지 — 본부 인지 및 모니터링",
+      "5월 초 연휴(5/1~5) 배송 차질 우려 — 이번 주 재고 선확보 긴급 요청"
+    ],
+    nextActions:[
+      "소매 예비비(3,000만) 활용 010 잔여 목표 대리점별 최대 드라이브",
+      "S26 미개통 건 전수 점검 및 긴급 개통 독려(익일 단가 축소 전)",
+      "4/30 해지 가능회선 수 대리점별 회신 독촉(28일 14시까지)",
+      "5월 연휴 대비 S26 중심 이번 주 내 재고 선확보 독려",
+      "4/29 서부본부 5월 정책 설명회(11시 Zoom) 유통망 참석 안내"
+    ],
+    policyChanges:"당일 정책 변경 없음. 예고: 익일(4/28) S26 그레이드 단가 일부 축소. 010 기간그레이드(3건↑ 5만) 오늘 만료.",
+    distributionNotes:"MVNO MNP 5월 이월 요청(서광주). 4/30 해지 가능회선 파악(28일 14시까지). SKN 5월 연휴 배송 일정 공지.",
+    teams:{
+      "동광주":{o10:620, mnp:538, mvno:191, arpu:75797, broadband:234, iptv:235, rate1g:40.2, rateGiga:93.2, rateTac:43.4, rateMas:35.5, rateNps:88.7, rateTarget:55.6},
+      "서광주":{o10:635, mnp:470, mvno:176, arpu:76295, broadband:246, iptv:263, rate1g:41.5, rateGiga:96.4, rateTac:45.0, rateMas:40.4, rateNps:88.1, rateTarget:70.9},
+      "전북":{o10:331, mnp:349, mvno:143, arpu:74361, broadband:149, iptv:155, rate1g:41.3, rateGiga:98.1, rateTac:40.9, rateMas:41.3, rateNps:86.3, rateTarget:62.5},
+      "제주(합산)":{o10:300, mnp:364, mvno:144, arpu:76502, broadband:108, iptv:105, rate1g:57.3, rateGiga:98.5, rateTac:42.0, rateMas:33.4, rateNps:87.1, rateTarget:56.4}
+    },
+    isWeeklyGenerated:false
   }
 ];
 
@@ -1501,71 +1533,53 @@ function renderTable(data) {
 
 /* ═══════════════════════════════
    MODAL
+════════════════════════
+   MODAL
 ═══════════════════════════════ */
 function openModal(date) {
-  const d = DAILY_DATA.find(x => x.date===date);
+  const d = DAILY_DATA.find(x => x.date === date);
   if (!d) return;
-  document.getElementById('modalTitle').textContent = '📅 ' + d.date + ' 상세 리포트';
-  let html = '';
-  // 요약
-  html += `<div class="msec"><h4>오늘의 요약</h4><p>${d.summary||'-'}</p></div>`;
-  // 주요 이슈
-  if (d.keyEvents && d.keyEvents.length) {
-    html += '<div class="msec"><h4>주요 이슈 TOP 5</h4><ul>' + d.keyEvents.map(e=>`<li>${e}</li>`).join('') + '</ul></div>';
-  }
-  // AI 추천
-  if (d.nextActions && d.nextActions.length) {
-    html += '<div class="msec"><h4>AI 추천 액션</h4><ul>' + d.nextActions.map(a=>`<li>${a}</li>`).join('') + '</ul></div>';
-  }
-  // 정책 변경
-  if (d.policyChanges) {
-    html += `<div class="msec"><h4>정책 변경</h4><p>${d.policyChanges}</p></div>`;
-  }
-  // 유통망
-  if (d.distributionNotes) {
-    html += `<div class="msec"><h4>유통망 소통</h4><p>${d.distributionNotes}</p></div>`;
-  }
-  // KPI 팀별 비교 (teams 데이터 있을 경우)
-  if (d.teams) {
-    html += '<div class="msec"><h4>팀별 KPI 현황</h4>';
-    html += '<table class="kpi-tbl"><thead><tr><th>지표</th>' + TEAMS.map(t=>`<th${t==='서광주'?' style="color:#22D3EE"':''}>` + t + '</th>').join('') + '<th>목표</th></tr></thead><tbody>';
-    KPI_DEF.forEach(def => {
-      html += '<tr>';
-      html += `<td style="text-align:left;color:#94A3B8">${def.label}</td>`;
-      TEAMS.forEach(team => {
-        const v = getVal(d, team, def.key);
-        const cls = team==='서광주' ? ' class="'+valClass(v,def)+'"' : '';
-        html += `<td${cls}>${v!=null?v+'%':'-'}</td>`;
-      });
-      html += `<td style="color:#475569">${def.tgtLine}%</td></tr>`;
-    });
-    html += '</tbody></table></div>';
-  }
-  document.getElementById('modalContent').innerHTML = html;
-  document.getElementById('modalOverlay').classList.add('open');
+  const el = document.getElementById('modalContent');
+  const mood = d.mood==='긍정'?'<span class="badge bp">긍정</span>':d.mood==='부정'?'<span class="badge bb">부정</span>':'<span class="badge bn">중립</span>';
+  const wk = d.isWeeklyGenerated ? '<span class="badge bwk">주간리포트</span>' : '';
+  let evHtml = (d.keyEvents||[]).map((e,i)=>`<div style="padding:4px 0;border-bottom:1px solid #1E293B"><span style="color:#22D3EE;font-weight:bold">${i+1}.</span> ${e}</div>`).join('');
+  let actHtml = (d.nextActions||[]).map((a,i)=>`<div style="padding:4px 0;border-bottom:1px solid #1E293B"><span style="color:#34D399;font-weight:bold">→</span> ${a}</div>`).join('');
+  el.innerHTML = `
+    <h2 style="color:#22D3EE;margin:0 0 8px">${date} ${mood}${wk}</h2>
+    <p style="color:#94A3B8;font-size:0.85rem;margin:0 0 12px">${d.summary||''}</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+      <div style="background:#1E293B;border-radius:6px;padding:10px">
+        <div style="color:#22D3EE;font-size:0.75rem;margin-bottom:6px">📢 정책 변경</div>
+        <div style="font-size:0.82rem">${d.policyChanges||'정보 없음'}</div>
+      </div>
+      <div style="background:#1E293B;border-radius:6px;padding:10px">
+        <div style="color:#22D3EE;font-size:0.75rem;margin-bottom:6px">🤝 유통망 소통</div>
+        <div style="font-size:0.82rem">${d.distributionNotes||'정보 없음'}</div>
+      </div>
+    </div>
+    <div style="background:#1E293B;border-radius:6px;padding:10px;margin-bottom:12px">
+      <div style="color:#22D3EE;font-size:0.75rem;margin-bottom:6px">⚡ 핵심 이슈</div>
+      ${evHtml||'정보 없음'}
+    </div>
+    <div style="background:#1E293B;border-radius:6px;padding:10px">
+      <div style="color:#34D399;font-size:0.75rem;margin-bottom:6px">✅ AI 추천 액션</div>
+      ${actHtml||'정보 없음'}
+    </div>`;
+  document.getElementById('modal').style.display='flex';
 }
-
-// ESC 키로 모달 닫기
-document.addEventListener('keydown', function(e){
-  if (e.key==='Escape') document.getElementById('modalOverlay').classList.remove('open');
-});
-// 오버레이 클릭으로 모달 닫기
-document.getElementById('modalOverlay').addEventListener('click', function(e){
-  if (e.target===this) this.classList.remove('open');
-});
+function closeModal(){document.getElementById('modal').style.display='none';}
+document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
 
 /* ═══════════════════════════════
-   INIT — 페이지 로드 시 자동 실행
+   INIT
 ═══════════════════════════════ */
 document.addEventListener('DOMContentLoaded', function() {
-  // 기본 날짜 필터: 이번 달 1일 ~ 오늘
-  const today = new Date();
-  const y = today.getFullYear();
-  const m = String(today.getMonth()+1).padStart(2,'0');
-  const d = String(today.getDate()).padStart(2,'0');
-  document.getElementById('dateFrom').value = y+'-'+m+'-01';
-  document.getElementById('dateTo').value   = y+'-'+m+'-'+d;
-  resetFilter();
+  const dates = DAILY_DATA.map(d=>d.date).sort();
+  if (dates.length) {
+    document.getElementById('dateFrom').value = dates[0];
+    document.getElementById('dateTo').value   = dates[dates.length-1];
+  }
+  applyFilter();
 });
 </script>
 </body>
