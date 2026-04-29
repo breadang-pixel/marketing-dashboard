@@ -1,4 +1,4 @@
-<!-- last-updated: 2026-04-29 09:15:07 -->
+<!-- last-updated: 2026-04-29 00:18:06 -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -1650,102 +1650,30 @@ function renderTrendCharts(data, metricFilter) {
       data: {
         labels: sorted.map(d => d.date.slice(5)),
         datasets: [
-          { label:'서광주', data:sorted.map(d=>getVal(d,'서광주',def.key)), borderColor:'#22D3EE', backgroundColor:'#22D3EE22', tension:0.3, fill:true, pointRadius:5, pointBackgroundColor:'#22D3EE', spanGaps:false },
-          { label:'목표 '+def.tgtLine+'%', data:sorted.map(()=>def.tgtLine), borderColor:'#EF444466', borderWidth:1.5, borderDash:[4,4], pointRadius:0, fill:false }
+          { label:'서광주', data:sorted.map(d=>getVal(d,'서광주',def.key)), borderColor:'#22D3EE', backgroundColor:'#22D3EE22', tension:0.3, fill:true, pointRadius:4, pointBackgroundColor:'#22D3EE', spanGaps:true },
+          { label:'동광주', data:sorted.map(d=>getVal(d,'동광주',def.key)), borderColor:'#6366F1', backgroundColor:'#6366F122', tension:0.3, fill:false, pointRadius:4, pointBackgroundColor:'#6366F1', spanGaps:true },
+          { label:'전북', data:sorted.map(d=>getVal(d,'전북',def.key)), borderColor:'#F59E0B', backgroundColor:'#F59E0B22', tension:0.3, fill:false, pointRadius:4, pointBackgroundColor:'#F59E0B', spanGaps:true },
+          { label:'제주(합산)', data:sorted.map(d=>getVal(d,'제주(합산)',def.key)), borderColor:'#34D399', backgroundColor:'#34D39922', tension:0.3, fill:false, pointRadius:4, pointBackgroundColor:'#34D399', spanGaps:true }
         ]
       },
       options: {
-        responsive: true,
-        plugins: { legend:{labels:{color:'#94A3B8',font:{size:10},boxWidth:12}} },
-        scales: {
-          x: { ticks:{color:'#94A3B8',font:{size:10}}, grid:{color:'#334155'} },
-          y: { ticks:{color:'#94A3B8',font:{size:10}}, grid:{color:'#334155'}} 
+        responsive:true, animation:false,
+        plugins:{ legend:{ labels:{ color:'#94A3B8', font:{size:10} } }, tooltip:{ callbacks:{
+          label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y != null ? ctx.parsed.y.toFixed(1)+(def.isRate?'%':'%달성') : 'N/A'}`
+        }}},
+        scales:{
+          x:{ ticks:{color:'#64748B',font:{size:9}}, grid:{color:'#1E293B'} },
+          y:{ ticks:{color:'#64748B',font:{size:9}, callback:v=>v.toFixed(0)+(def.isRate?'%':'%')}, grid:{color:'#1E293B'} }
         }
       }
     });
   });
 }
 
-/* ═══════════════════════════════
-   TABLE
-═══════════════════════════════ */
-function fmtCell(val, def) {
-  if (val == null) return '<span class="vn">-</span>';
-  return '<span class="'+valClass(val,def)+'">'+val+'%</span>';
-}
-
-function renderTable(data) {
-  let html = '';
-  data.forEach(function(d) {
-    let cells = '';
-    KPI_DEF.forEach(function(def) {
-      cells += '<td>' + fmtCell(getVal(d,'서광주',def.key), def) + '</td>';
-    });
-    const moodBadge = d.mood==='긍정' ? '<span class="badge bp">긍정</span>' :
-                      d.mood==='부정' ? '<span class="badge bb">부정</span>' :
-                      '<span class="badge bn">중립</span>';
-    const wkBadge = d.isWeeklyGenerated ? '<span class="badge bwk">주간</span>' : '';
-    const topIssue = d.keyEvents && d.keyEvents[0] ? d.keyEvents[0].slice(0,30)+'…' : (d.summary||'').slice(0,30)+'…';
-    html += `<tr onclick="openModal('${d.date}')">
-      <td class="tl"><strong>${d.date}</strong></td>
-      ${cells}
-      <td class="tl">${moodBadge}${wkBadge} <span style="color:#94A3B8;font-size:0.7rem">${topIssue}</span></td>
-    </tr>`;
-  });
-  document.getElementById('tableBody').innerHTML = html || '<tr><td colspan="14" style="color:#475569;padding:16px">데이터 없음</td></tr>';
-}
-
-/* ═══════════════════════════════
-   MODAL
-════════════════════════
-   MODAL
-═══════════════════════════════ */
-function openModal(date) {
-  const d = DAILY_DATA.find(x => x.date === date);
-  if (!d) return;
-  const el = document.getElementById('modalContent');
-  const mood = d.mood==='긍정'?'<span class="badge bp">긍정</span>':d.mood==='부정'?'<span class="badge bb">부정</span>':'<span class="badge bn">중립</span>';
-  const wk = d.isWeeklyGenerated ? '<span class="badge bwk">주간리포트</span>' : '';
-  let evHtml = (d.keyEvents||[]).map((e,i)=>`<div style="padding:4px 0;border-bottom:1px solid #1E293B"><span style="color:#22D3EE;font-weight:bold">${i+1}.</span> ${e}</div>`).join('');
-  let actHtml = (d.nextActions||[]).map((a,i)=>`<div style="padding:4px 0;border-bottom:1px solid #1E293B"><span style="color:#34D399;font-weight:bold">→</span> ${a}</div>`).join('');
-  el.innerHTML = `
-    <h2 style="color:#22D3EE;margin:0 0 8px">${date} ${mood}${wk}</h2>
-    <p style="color:#94A3B8;font-size:0.85rem;margin:0 0 12px">${d.summary||''}</p>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
-      <div style="background:#1E293B;border-radius:6px;padding:10px">
-        <div style="color:#22D3EE;font-size:0.75rem;margin-bottom:6px">📢 정책 변경</div>
-        <div style="font-size:0.82rem">${d.policyChanges||'정보 없음'}</div>
-      </div>
-      <div style="background:#1E293B;border-radius:6px;padding:10px">
-        <div style="color:#22D3EE;font-size:0.75rem;margin-bottom:6px">🤝 유통망 소통</div>
-        <div style="font-size:0.82rem">${d.distributionNotes||'정보 없음'}</div>
-      </div>
-    </div>
-    <div style="background:#1E293B;border-radius:6px;padding:10px;margin-bottom:12px">
-      <div style="color:#22D3EE;font-size:0.75rem;margin-bottom:6px">⚡ 핵심 이슈</div>
-      ${evHtml||'정보 없음'}
-    </div>
-    <div style="background:#1E293B;border-radius:6px;padding:10px">
-      <div style="color:#34D399;font-size:0.75rem;margin-bottom:6px">✅ AI 추천 액션</div>
-      ${actHtml||'정보 없음'}
-    </div>`;
-  document.getElementById('modal').style.display='flex';
-}
-function closeModal(){document.getElementById('modal').style.display='none';}
-document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
-
-/* ═══════════════════════════════
-   INIT
-═══════════════════════════════ */
 document.addEventListener('DOMContentLoaded', function() {
-  const dates = DAILY_DATA.map(d=>d.date).sort();
-  if (dates.length) {
-    document.getElementById('dateFrom').value = dates[Math.max(0,dates.length-14)];
-    document.getElementById('dateTo').value   = dates[dates.length-1];
-  }
-  filtered = [...DAILY_DATA].sort((a,b) => b.date.localeCompare(a.date));
-  renderAll(filtered, 'all');
+  resetFilter();
 });
 </script>
 </body>
 </html>
+          { label:'서광주', data:sorted.map(d=>getVal(d,'서광주',def.key)), borderColor:'#22D3EE', backgroundColor:'#22D3EE22', tension:0.3, fill:true, poin
