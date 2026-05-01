@@ -1,4 +1,4 @@
-<!-- last-updated: 2026-05-01 00:51:17 -->
+<!-- last-updated: 2026-05-01 01:51:27 -->
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -1883,10 +1883,10 @@ function openModal(date) {
       <div style="color:#34D399;font-size:0.75rem;margin-bottom:6px">✅ AI 추천 액션</div>
       ${actHtml||'정보 없음'}
     </div>`;
-  document.getElementById('modal').style.display='flex';
+  document.getElementById('modalOverlay').classList.add('open');
 }
-function closeModal(){document.getElementById('modal').style.display='none';}
-document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+function closeModal(){document.getElementById('modalOverlay').classList.remove('open');}
+document.getElementById('modalOverlay').addEventListener('click',function(e){if(e.target===this)closeModal();});
 
 /* ═══════════════════════════════
    INIT
